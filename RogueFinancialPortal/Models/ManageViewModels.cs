@@ -9,6 +9,11 @@ namespace RogueFinancialPortal.Models
     {
         public bool HasPassword { get; set; }
         public IList<UserLoginInfo> Logins { get; set; }
+        public string UserId { get; set; }
+        public string Email { get; set; }
+        public string AvatarPath { get; set; }
+        public string FullName { get; set; }
+        public string UserRole { get; set; }
         public string PhoneNumber { get; set; }
         public bool TwoFactor { get; set; }
         public bool BrowserRemembered { get; set; }

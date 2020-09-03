@@ -1,12 +1,210 @@
 ﻿@model RogueFinancialPortal.Models.IndexViewModel
-@{
-    ViewBag.Title = "Manage";
+
+@using Microsoft.AspNet.Identity
+@using RogueFinancialPortal.Helpers;
+
+@{ var userHelper = new UserHelper(); }
+@{ var userRoleHelper = new UserRoleHelper(); }
+
+@{ var user = userHelper.getUser(User.Identity.GetUserId());
+
 }
 
-<h2>@ViewBag.Title.</h2>
 
-<p class="text-success">@ViewBag.StatusMessage</p>
-<div>
+
+
+<div class="container-fluid p-t-10">
+    <!-- ============================================================== -->
+    <!-- Start Page Content -->
+    <!-- ============================================================== -->
+    <!-- Row -->
+    <div class="row">
+        <!-- Column -->
+        <div class="col-lg-4 col-xlg-3 col-md-5">
+            <div class="card">
+                <div class="card-body">
+                    <center class="m-t-30">
+                        <img src="@user.AvatarPath" class="img-circle" width="150" />
+                        <h4 class="card-title m-t-10">@user.FullName</h4>
+                        <h6 class="card-subtitle">@userRoleHelper.ListUserRoles(user.Id).FirstOrDefault()</h6>
+                        <div class="row text-center justify-content-md-center">
+                            <h4><a href="@Url.Action("Index", "Projects", new { userid = user.Id })"><i class="mdi mdi-book-open-page-variant">  Projects</i></a></h4>
+                        </div>
+                        <div class="row text-center justify-content-md-center">
+                            <h4><a href="@Url.Action("Index", "Tickets", new { userid = user.Id })"><i class="mdi mdi-book-open-page-variant">  Tickets</i></a></h4>
+                        </div>
+                    </center>
+                </div>
+                <div>
+                    <hr>
+                </div>
+                <div class="card-body">
+                    <small class="text-muted">Email address </small>
+                    <h6>@user.Email</h6> <small class="text-muted p-t-30 db">Phone</small>
+                    <h6> @user.PhoneNumber</h6>
+                    <button class="btn btn-circle btn-secondary"><i class="fa fa-facebook"></i></button>
+                    <button class="btn btn-circle btn-secondary"><i class="fa fa-twitter"></i></button>
+                    <button class="btn btn-circle btn-secondary"><i class="fa fa-youtube"></i></button>
+
+                </div>
+            </div>
+        </div>
+        <!-- Column -->
+        <!-- Column -->
+        <div class="col-lg-8 col-xlg-9 col-md-7">
+            <div class="card">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs profile-tab" role="tablist">
+                    @*<li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#home" role="tab">Ticket</a> </li>*@
+                    <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#profile" role="tab">Profile</a> </li>
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#Notifications" role="tab">Notifications</a> </li>
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#Settings" role="tab">Settings</a> </li>
+
+                </ul>
+                <!-- Tab panes -->
+
+                <div class="tab-content">
+                    <div class="tab-pane active" id="profile" role="tabpanel">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3 col-xs-6 b-r">
+                                    <strong>Full Name</strong>
+                                    <br>
+                                    <p class="text-muted">@user.FullName</p>
+                                </div>
+                                <div class="col-md-3 col-xs-6 b-r">
+                                    <strong>Mobile</strong>
+                                    <br>
+                                    <p class="text-muted">@user.PhoneNumber</p>
+                                </div>
+                                <div class="col-md-3 col-xs-6 b-r">
+                                    <strong>Email</strong>
+                                    <br>
+                                    <p class="text-muted">@user.Email</p>
+                                </div>
+
+                            </div>
+                            <hr>
+                            <p class="m-t-30"> set up a get user profile descriptiton (from settings page)</p>
+
+                        </div>
+                    </div>
+
+                    <div class="tab-pane " id="Notifications" role="tabpanel">
+                        <div class="card-body">
+                            <div class="row">
+                                <h4 class="card-title">Ticket Notifications</h4>
+                                <div class="comment-widgets m-b-20">
+                                    <div class="chat-box b-all">
+                                        <ul class="notificationList chat-list">
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane " id="Settings" role="tabpanel">
+                        <div class="card-body">
+                            <h2>Change your account settings</h2>
+                            <hr />
+                            <div class="row p-l-20">
+
+                                <div class="col-6">
+                                    <h4 class="card-title">Change Proile Information</h4>
+                                    <h6 class="card-subtitle p-l-20">Change Name, Email, Phone Number, Avatar Picture</h6>
+                                    @Html.ActionLink("Edit Account", "ManageUser", "Manage", new { userid = user.Id }, new { @class = "p-l-20" })
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="row p-l-20">
+                                <div class="col-6">
+                                    <h4 class="card-title">Change Password</h4>
+                                    <h6 class="card-subtitle p-l-20">Change Password</h6>
+                                    @Html.ActionLink("Change Password", "ManageUser", "Manage", new { userid = user.Id }, new { @class = "p-l-20" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+                                            //getUserNotifications();
+                                        });
+
+        @*$('.notificaionClose').on("click", function (e) {
+             var url = '@Url.Action("setNotificationIsRead", "HomeTableChart")'
+            var notification = $(".notificaionClose").val();
+
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: url,
+                data: JSON.stringify({ "notificationId": notification }),
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    getTicketComments(ticketId)
+                },
+                error: function () {
+                    alert("Error while inserting data");
+                }
+            });
+
+
+        })
+
+         function getUserNotifications() {
+             var url = '@Url.Action("GetUserNotifications", "Manage")'
+            $.ajax({
+                type: "POST",
+                url: url,
+                //data: JSON.stringify({ 'ticketId': ticketId }),
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    $(".notificationList").empty();
+
+                    if (typeof response != "undefined" && response != null && response.length != null && response.length > 0) {
+                        response.forEach(function (response) {
+                            $(".notificationList").append(
+                                `<div class="alert alert-${response.Type}">
+                                         <h6>${response.Created}</h6>
+                                            <button type="button" value="${response.Id},${response.notificationVersion}" class="close notificaionClose" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                                            <h3 class="text-${response.Type}"><i class="fa ${response.Icon}"></i> ${response.Subject}</h3> ${response.Message}
+                                        </div>`
+                            )
+                        })
+
+
+                    } else {
+                        $(".chat-list").append(` <h4 class= "card-title"> No Comments on The Ticket</h4>`)
+                    }
+                    $(".NotificationDisplay").show();
+                },
+                error: function (response) {
+                    alert("Error while inserting data");
+                }
+
+            });
+        }*@
+    </script>
+
+
+
+
+}
+
+<!-- Row -->
+<!-- ============================================================== -->
+<!-- End PAge Content -->
+@*<div>
     <h4>Change your account settings</h4>
     <hr />
     <dl class="dl-horizontal">
@@ -27,61 +225,154 @@
         <dd>
             @Model.Logins.Count [
             @Html.ActionLink("Manage", "ManageLogins") ]
-        </dd>
-        @*
-            Phone Numbers can used as a second factor of verification in a two-factor authentication system.
-             
-             See <a href="https://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
-                for details on setting up this ASP.NET application to support two-factor authentication using SMS.
-             
-             Uncomment the following block after you have set up two-factor authentication
-        *@
-        @*  
-            <dt>Phone Number:</dt>
+        </dd>*@
+@*
+    Phone Numbers can used as a second factor of verification in a two-factor authentication system.
+
+     See <a href="https://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
+        for details on setting up this ASP.NET application to support two-factor authentication using SMS.
+
+     Uncomment the following block after you have set up two-factor authentication
+*@
+@*
+    <dt>Phone Number:</dt>
+    <dd>
+        @(Model.PhoneNumber ?? "None")
+        @if (Model.PhoneNumber != null)
+        {
+            <br />
+            <text>[&nbsp;&nbsp;@Html.ActionLink("Change", "AddPhoneNumber")&nbsp;&nbsp;]</text>
+            using (Html.BeginForm("RemovePhoneNumber", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            {
+                @Html.AntiForgeryToken()
+                <text>[<input type="submit" value="Remove" class="btn-link" />]</text>
+            }
+        }
+        else
+        {
+            <text>[&nbsp;&nbsp;@Html.ActionLink("Add", "AddPhoneNumber")
+        }
+    </dd>
+*@
+@*<dt>Two-Factor Authentication:</dt>
+    <dd>
+        <p>
+            There are no two-factor authentication providers configured. See <a href="https://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
+            for details on setting up this ASP.NET application to support two-factor authentication.
+        </p>*@
+@*@if (Model.TwoFactor)
+    {
+        using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            <text>Enabled
+            <input type="submit" value="Disable" class="btn btn-link" />
+            </text>
+        }
+    }
+    else
+    {
+        using (Html.BeginForm("EnableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            <text>Disabled
+            <input type="submit" value="Enable" class="btn btn-link" />
+            </text>
+        }
+    }*@
+@*</dd>
+        </dl>
+    </div>*@
+
+
+
+
+
+
+@*@model RogueFinancialPortal.Models.IndexViewModel
+    @{
+        ViewBag.Title = "Manage";
+    }
+
+    <h2>@ViewBag.Title.</h2>
+
+    <p class="text-success">@ViewBag.StatusMessage</p>
+    <div>
+        <h4>Change your account settings</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>Password:</dt>
             <dd>
-                @(Model.PhoneNumber ?? "None")
-                @if (Model.PhoneNumber != null)
+                [
+                @if (Model.HasPassword)
                 {
-                    <br />
-                    <text>[&nbsp;&nbsp;@Html.ActionLink("Change", "AddPhoneNumber")&nbsp;&nbsp;]</text>
-                    using (Html.BeginForm("RemovePhoneNumber", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                    {
-                        @Html.AntiForgeryToken()
-                        <text>[<input type="submit" value="Remove" class="btn-link" />]</text>
-                    }
+                    @Html.ActionLink("Change your password", "ChangePassword")
                 }
                 else
                 {
-                    <text>[&nbsp;&nbsp;@Html.ActionLink("Add", "AddPhoneNumber")
+                    @Html.ActionLink("Create", "SetPassword")
                 }
+                ]
             </dd>
-        *@
-        <dt>Two-Factor Authentication:</dt>
-        <dd>
-            <p>
-                There are no two-factor authentication providers configured. See <a href="https://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
-                for details on setting up this ASP.NET application to support two-factor authentication.
-            </p>
-            @*@if (Model.TwoFactor)
-                {
-                    using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+            <dt>External Logins:</dt>
+            <dd>
+                @Model.Logins.Count [
+                @Html.ActionLink("Manage", "ManageLogins") ]
+            </dd>
+
+                Phone Numbers can used as a second factor of verification in a two-factor authentication system.
+
+                 See <a href="https://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
+                    for details on setting up this ASP.NET application to support two-factor authentication using SMS.
+
+                 Uncomment the following block after you have set up two-factor authentication
+
+
+                <dt>Phone Number:</dt>
+                <dd>
+                    @(Model.PhoneNumber ?? "None")
+                    @if (Model.PhoneNumber != null)
                     {
-                        @Html.AntiForgeryToken()
-                        <text>Enabled
-                        <input type="submit" value="Disable" class="btn btn-link" />
-                        </text>
+                        <br />
+                        <text>[&nbsp;&nbsp;@Html.ActionLink("Change", "AddPhoneNumber")&nbsp;&nbsp;]</text>
+                        using (Html.BeginForm("RemovePhoneNumber", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <text>[<input type="submit" value="Remove" class="btn-link" />]</text>
+                        }
                     }
-                }
-                else
-                {
-                    using (Html.BeginForm("EnableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                    else
                     {
-                        @Html.AntiForgeryToken()
-                        <text>Disabled
-                        <input type="submit" value="Enable" class="btn btn-link" />
-                        </text>
+                        <text>[&nbsp;&nbsp;@Html.ActionLink("Add", "AddPhoneNumber")
                     }
-                }*@
-        </dd>
-    </dl>
-</div>
+                </dd>
+
+            <dt>Two-Factor Authentication:</dt>
+            <dd>
+                <p>
+                    There are no two-factor authentication providers configured. See <a href="https://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
+                    for details on setting up this ASP.NET application to support two-factor authentication.
+                </p>
+                @if (Model.TwoFactor)
+                    {
+                        using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <text>Enabled
+                            <input type="submit" value="Disable" class="btn btn-link" />
+                            </text>
+                        }
+                    }
+                    else
+                    {
+                        using (Html.BeginForm("EnableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <text>Disabled
+                            <input type="submit" value="Enable" class="btn btn-link" />
+                            </text>
+                        }
+                    }
+            </dd>
+        </dl>
+    </div>*@

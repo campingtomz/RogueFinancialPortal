@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using RogueFinancialPortal.Extensions;
 
 namespace RogueFinancialPortal.Models
 {
@@ -43,6 +44,7 @@ namespace RogueFinancialPortal.Models
             WarningBalance = warningBalance - 1000;
             Created = DateTime.Now;
             OwnerId = HttpContext.Current.User.Identity.GetUserId();
+            HouseHoldId = (int)HttpContext.Current.User.Identity.GetHouseHoldId();
         }
         public BankAccount()
         {

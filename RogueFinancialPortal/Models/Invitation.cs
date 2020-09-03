@@ -11,10 +11,10 @@ namespace RogueFinancialPortal.Models
     {
         public int Id { get; set; }
         #region Parents/Children
-        public int HouseHoldId { get; set; }
         public string OwnerId { get; set; }
-        public virtual HouseHold HouseHold { get; set; }
         public virtual ApplicationUser Owner { get; set; }
+        public int HouseHoldId { get; set; }
+        public virtual HouseHold HouseHold { get; set; }
 
         #endregion
         #region Actual Properties

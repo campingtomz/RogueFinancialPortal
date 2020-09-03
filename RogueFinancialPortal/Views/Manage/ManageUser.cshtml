@@ -1,0 +1,153 @@
+﻿@using RogueFinancialPortal.Models
+@model ApplicationUser
+@using RogueFinancialPortal.Helpers;
+@using Microsoft.AspNet.Identity;
+
+@{ var userHelper = new UserHelper();
+    UserRoleHelper roleHelper = new UserRoleHelper();
+}
+
+@using (Html.BeginForm("ManageUser", "UserManagment", FormMethod.Post, new { id = "myform", enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(m => m.UserId)
+    @Html.HiddenFor(m => m.AvatarPath)
+
+    @Html.AntiForgeryToken()
+    <!-- Row -->
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="row justify-content-center">
+        <div class="col-lg-12">
+            <div class="card card-outline-info">
+                <div class="card-header">
+                    <h4 class="m-b-0 text-white">Manage User @Model.FullName</h4>
+                </div>
+                <div class="card-body">
+
+                    <div class="form-group row">
+                        <div class="col-md-3">
+                            <img src="@Model.AvatarPath" class="img-circle" width="150" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="control-label text-right col-md-3">First Name</label>
+                        <div class="col-md-3">
+                            @Html.EditorFor(m => m.FirstName, new { htmlAttributes = new { @class = "form-control " } })
+                            @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="control-label text-right col-md-3">Last Name</label>
+                        <div class="col-md-3">
+                            @Html.EditorFor(m => m.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(m => m.LastName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="control-label text-right col-md-3">Email</label>
+                        <div class="col-md-3">
+                            @Html.EditorFor(m => m.Email, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="control-label text-right col-md-3">Phone Number</label>
+                        <div class="col-md-3">
+                            @Html.EditorFor(m => m.PhoneNumber, new { htmlAttributes = new { @class = "form-control  phone-inputmask", value = "@user.PhoneNumber" } })
+                            @Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    @if (roleHelper.CanEditRole())
+                    {
+                        <div class="form-group row">
+                            <label class="control-label text-right col-md-3">Roles</label>
+                            <div class="col-md-3">
+                                @Html.DropDownList("RoleName", null, new { @class = "form-control" })
+
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="form-group row">
+                            <label class="control-label text-right col-md-3">Roles</label>
+                            <div class="col-md-3">
+                                @roleHelper.ListUserRoles(Model.Id).FirstOrDefault();
+                            </div>
+                        </div>
+                    }
+                    <div class="form-group-row">
+                        <div class="col-3">
+                            <label class="control-label">Projects User is On</label>
+
+                            @Html.ListBox("UserProjects", null, new { @class = "form-control " })
+                        </div>
+                        <div class="btn-group m-b-40 m-t-40" role="group" aria-label="Basic example">
+                            <button type="button" class="btn btn-success" onclick="javascript: MoveListBoxItem('ListOfProjects', 'UserProjects')"><i class="fa fa-fast-backward"></i></button>
+                            <button type="button" class="btn btn-success" onclick="javascript: MoveListBoxItem('UserProjects', 'ListOfProjects')"><i class="fa fa-fast-forward"></i></button>
+                        </div>
+                        <div class="col-3">
+                            <label class="control-label">List Of Projects User is Not on</label>
+                            @Html.ListBox("ListOfProjects", null, new { @class = "form-control " })
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="control-label text-right col-md-3">Avatar Image Upload</label>
+                        <div class="col-md-3">
+                            <input name="Avatar" type="file" class=" dropify form-control" id="fileUpload" />
+                            @Html.ValidationMessageFor(m => m.AvatarPath, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="offset-sm-3 col-md-9">
+                                    <button type="submit" id="btn-submit" class="btn btn-success"> <i class="fa fa-check"></i> Submit</button>
+
+                                    @Html.ActionLink("Cancel", "Index", null, new { @type = "button", @class = "btn btn-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            // Basic
+            $('.dropify').dropify();
+        });
+    </script>
+
+    <script>
+        function MoveListBoxItem(fromId, toId) {
+            $("#" + fromId + " option:selected").remove().appendTo("#" + toId);
+        }
+    </script>
+    <script>
+        $('#btn-submit').on("click", function (e) {
+            e.preventDefault();
+
+            var UserProjectIds = new Array();
+            $('#UserProjects option').each(function () {
+                UserProjectIds.push($(this).val())
+            })
+
+            //alert(UserProjectIds)
+            $('#ProjectIds').val(UserProjectIds)
+            //var test = `${$("#UserProjects").children("option:selected").val()},${UserProjects.join(',')}`
+
+            ////alert($("#ProjectManagers").children("option:selected").val() += `,${Submitters.join(',')}`)
+            //$("#UserProjects").children("option:selected").val(test);
+            $("#myform").submit()
+        })
+    </script>
+}
+
+
+

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web;
 
 namespace RogueFinancialPortal.Models
 {
@@ -80,7 +81,13 @@ namespace RogueFinancialPortal.Models
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
     }
-
+    public class ExtendedRegisterViewModel: RegisterViewModel
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string PhoneNumber { get; set; }
+        public HttpPostedFileBase Avatar { get; set; }
+    }
     public class ResetPasswordViewModel
     {
         [Required]

@@ -8,8 +8,12 @@ using System.Web;
 
 namespace RogueFinancialPortal.Models
 {
+
     public class Budget
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
+
+
         public int Id { get; set; }
         #region Parents/Children
         public int HouseHoldId { get; set; }

@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNet.Identity;
+using RogueFinancialPortal.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+
 
 namespace RogueFinancialPortal.Models
 {
@@ -21,7 +23,7 @@ namespace RogueFinancialPortal.Models
         public int? BudgetItemId { get; set; }
         public virtual BudgetItem BudgetItem { get; set; }
 
-        //public TransactionType TransactionType { get; set; }
+        public TransactionType TransactionType { get; set; }
         #endregion
         #region Actual Properties
         public DateTime Created { get; set; }
@@ -30,7 +32,7 @@ namespace RogueFinancialPortal.Models
 
         [Display(Name = "Delete Transaction")]
         public bool IsDeleted { get; set; }
-        //public AccountType AccountType { get; set; }
+        public AccountType AccountType { get; set; }
         #endregion
         #region virtual
         #endregion

@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using BugTracker.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using RogueFinancialPortal.Extensions;
 using RogueFinancialPortal.Models;
 
 namespace RogueFinancialPortal.Controllers
@@ -13,6 +16,8 @@ namespace RogueFinancialPortal.Controllers
     [Authorize]
     public class ManageController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
+
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
@@ -67,6 +72,7 @@ namespace RogueFinancialPortal.Controllers
             var model = new IndexViewModel
             {
                 HasPassword = HasPassword(),
+                
                 PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
                 TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
                 Logins = await UserManager.GetLoginsAsync(userId),
@@ -74,7 +80,8 @@ namespace RogueFinancialPortal.Controllers
             };
             return View(model);
         }
-
+       
+        
         //
         // POST: /Manage/RemoveLogin
         [HttpPost]
@@ -219,7 +226,13 @@ namespace RogueFinancialPortal.Controllers
         {
             return View();
         }
-
+        public ActionResult ManageUser(string userId)
+        {
+            var user = db.Users.Find(userId);
+            ManageUserVM ManageUser = new ManageUserVM();
+            ManageUser.AvatarPath = user.AvatarPath;
+            return View(ManageUser);
+        }
         //
         // POST: /Manage/ChangePassword
         [HttpPost]
