@@ -22,6 +22,7 @@ namespace RogueFinancialPortal.Models
         public virtual BankAccount BanckAccount { get; set; }
         public int? BudgetItemId { get; set; }
         public virtual BudgetItem BudgetItem { get; set; }
+        public virtual ICollection<TransactionAttachment> Attachments { get; set; }
 
         public TransactionType TransactionType { get; set; }
         #endregion

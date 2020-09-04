@@ -29,9 +29,10 @@ namespace RogueFinancialPortal.Models
         public string FirstName { get; set; }
 
         [Required]
-        [Display(Name = "First Name")]
+        [Display(Name = "Last Name")]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "Last Name Must be between 2 and 50 characters")]
         public string LastName { get; set; }
+        public string Descriptiton { get; set; }
         public string AvatarPath { get; set; }
         public int? HouseHoldId { get; set; }
         public virtual HouseHold HouseHold { get; set; }
@@ -110,6 +111,7 @@ namespace RogueFinancialPortal.Models
         public DbSet<Invitation> Invitations { get; set; }
         public DbSet<BankAccount> BankAccounts { get; set; }
         public DbSet<HouseHold> HouseHolds { get; set; }
-
+        public DbSet<TransactionAttachment> TransactionAttachments { get; set; }
+        
     }
 }

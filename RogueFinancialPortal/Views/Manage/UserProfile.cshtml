@@ -1,0 +1,111 @@
+﻿@model RogueFinancialPortal.Models.IndexViewModel
+
+@using Microsoft.AspNet.Identity
+@using RogueFinancialPortal.Helpers;
+
+@{ var userHelper = new UserHelper(); }
+@{ var userRoleHelper = new UserRoleHelper(); }
+
+@{ var user = userHelper.getUser(User.Identity.GetUserId());
+
+}
+
+
+
+
+<div class="container-fluid p-t-10">
+    <!-- ============================================================== -->
+    <!-- Start Page Content -->
+    <!-- ============================================================== -->
+    <!-- Row -->
+    <div class="row">
+        <!-- Column -->
+        <div class="col-lg-4 col-xlg-3 col-md-5">
+            <div class="card">
+                <div class="card-body">
+                    <center class="m-t-30">
+                        <img src="@user.AvatarPath" class="img-circle" width="150" />
+                        <h4 class="card-title m-t-10">@user.FullName</h4>
+                        <h6 class="card-subtitle">@userRoleHelper.ListUserRoles(user.Id).FirstOrDefault()</h6>
+                        <div class="row text-center justify-content-md-center">
+                            <h4><a href="@Url.Action("Index", "Projects", new { userid = user.Id })"><i class="mdi mdi-book-open-page-variant">  Projects</i></a></h4>
+                        </div>
+                        <div class="row text-center justify-content-md-center">
+                            <h4><a href="@Url.Action("Index", "Tickets", new { userid = user.Id })"><i class="mdi mdi-book-open-page-variant">  Tickets</i></a></h4>
+                        </div>
+                    </center>
+                </div>
+                <div>
+                    <hr>
+                </div>
+                <div class="card-body">
+                    <small class="text-muted">Email address </small>
+                    <h6>@user.Email</h6> <small class="text-muted p-t-30 db">Phone</small>
+                    <h6> @user.PhoneNumber</h6>
+                    <button class="btn btn-circle btn-secondary"><i class="fa fa-facebook"></i></button>
+                    <button class="btn btn-circle btn-secondary"><i class="fa fa-twitter"></i></button>
+                    <button class="btn btn-circle btn-secondary"><i class="fa fa-youtube"></i></button>
+
+                </div>
+            </div>
+        </div>
+        <!-- Column -->
+        <!-- Column -->
+        <div class="col-lg-8 col-xlg-9 col-md-7">
+            <div class="card">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs profile-tab" role="tablist">
+                    @*<li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#home" role="tab">Ticket</a> </li>*@
+                    <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#profile" role="tab">Profile</a> </li>
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#Notifications" role="tab">Notifications</a> </li>
+                    <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#Settings" role="tab">Settings</a> </li>
+
+                </ul>
+                <!-- Tab panes -->
+
+                <div class="tab-content">
+                    <div class="tab-pane active" id="profile" role="tabpanel">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3 col-xs-6 b-r">
+                                    <strong>Full Name</strong>
+                                    <br>
+                                    <p class="text-muted">@user.FullName</p>
+                                </div>
+                                <div class="col-md-3 col-xs-6 b-r">
+                                    <strong>Mobile</strong>
+                                    <br>
+                                    <p class="text-muted">@user.PhoneNumber</p>
+                                </div>
+                                <div class="col-md-3 col-xs-6 b-r">
+                                    <strong>Email</strong>
+                                    <br>
+                                    <p class="text-muted">@user.Email</p>
+                                </div>
+
+                            </div>
+                            <hr>
+                            <p class="m-t-30"> set up a get user profile descriptiton (from settings page)</p>
+
+                        </div>
+                    </div>
+
+                    <div class="tab-pane " id="Notifications" role="tabpanel">
+                        <div class="card-body">
+                            <div class="row">
+                                <h4 class="card-title">Ticket Notifications</h4>
+                                <div class="comment-widgets m-b-20">
+                                    <div class="chat-box b-all">
+                                        <ul class="notificationList chat-list">
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                   
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

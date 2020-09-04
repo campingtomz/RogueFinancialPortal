@@ -4,12 +4,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using BugTracker.ViewModels;
+using RogueFinancialPortal.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using RogueFinancialPortal.Extensions;
 using RogueFinancialPortal.Models;
+using RogueFinancialPortal.Helpers;
+using System.IO;
+using System.Web.Configuration;
 
 namespace RogueFinancialPortal.Controllers
 {
@@ -229,14 +232,68 @@ namespace RogueFinancialPortal.Controllers
         public ActionResult ManageUser(string userId)
         {
             var user = db.Users.Find(userId);
-            ManageUserVM ManageUser = new ManageUserVM();
-            ManageUser.AvatarPath = user.AvatarPath;
-            return View(ManageUser);
+            ManageUserVM model = new ManageUserVM();
+            model.UserId = user.Id;
+            model.FirstName = user.FirstName;
+            model.Email = user.Email;
+            model.LastName = user.LastName;
+            model.PhoneNumber = user.PhoneNumber;
+            model.FullName = user.FullName;
+            
+
+            model.AvatarPath = user.AvatarPath;
+
+            return View(model);
         }
-        //
+             //
         // POST: /Manage/ChangePassword
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public ActionResult ManageUser(ManageUserVM manageUserVm, int onPage)
+        {
+            var user = db.Users.Find(manageUserVm.UserId);
+
+            user.Email = manageUserVm.Email;
+            user.UserName = manageUserVm.Email;
+            user.FirstName = manageUserVm.FirstName;
+            user.LastName = manageUserVm.LastName;
+            user.PhoneNumber = manageUserVm.PhoneNumber;
+            user.AvatarPath = manageUserVm.AvatarPath;
+
+            if (FileUploadValidator.IsWebFriendlyImage(manageUserVm.Avatar))
+            {
+                var fileName = FileStamp.MakeUnique(manageUserVm.Avatar.FileName);
+                var serverFolder = WebConfigurationManager.AppSettings["DefaultAvatarFolder"];
+                manageUserVm.Avatar.SaveAs(Path.Combine(Server.MapPath(serverFolder), fileName));
+                user.AvatarPath = $"{serverFolder}{fileName}";
+            }
+
+            db.SaveChanges();
+            if(onPage == 0)
+            {
+                return RedirectToAction("Index","Manage");
+            }
+            if (onPage == 1)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+           
+                return RedirectToAction("Index", "manage");
+           
+        }
+        public ActionResult UserProfile(string userId)
+        {
+            var user = db.Users.Find(userId);
+            ManageUserVM model = new ManageUserVM();
+            model.UserId = user.Id;
+            model.FirstName = user.FirstName;
+            model.Email = user.Email;
+            model.LastName = user.LastName;
+            model.PhoneNumber = user.PhoneNumber;
+            model.FullName = user.FullName;
+            model.AvatarPath = user.AvatarPath;
+            return View(model);
+        }
         public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
         {
             if (!ModelState.IsValid)

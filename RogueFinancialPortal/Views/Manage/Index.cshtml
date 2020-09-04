@@ -113,7 +113,7 @@
                                 <div class="col-6">
                                     <h4 class="card-title">Change Proile Information</h4>
                                     <h6 class="card-subtitle p-l-20">Change Name, Email, Phone Number, Avatar Picture</h6>
-                                    @Html.ActionLink("Edit Account", "ManageUser", "Manage", new { userid = user.Id }, new { @class = "p-l-20" })
+                                    @Html.ActionLink("Edit Account", "ManageUser", "Manage", new { userId = user.Id }, new { @class = "p-l-20" })
                                 </div>
                             </div>
                             <hr />
@@ -121,7 +121,7 @@
                                 <div class="col-6">
                                     <h4 class="card-title">Change Password</h4>
                                     <h6 class="card-subtitle p-l-20">Change Password</h6>
-                                    @Html.ActionLink("Change Password", "ManageUser", "Manage", new { userid = user.Id }, new { @class = "p-l-20" })
+                                    @Html.ActionLink("Change Password", "ManageUser", "Manage", new { userId = user.Id }, new { @class = "p-l-20" })
                                 </div>
                             </div>
                         </div>

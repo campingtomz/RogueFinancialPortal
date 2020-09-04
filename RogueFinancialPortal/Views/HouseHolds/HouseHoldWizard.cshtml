@@ -1,0 +1,142 @@
+﻿@*@using RogueFinancialPortal.ViewModels;
+    @model HouseHoldCreationWizardVM*@
+
+
+
+@*@using (Html.BeginForm())
+    {*@
+@*@Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "test-danger" })
+    @Html.HiddenFor(model => model.HouseHoldId)*@
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body wizard-content">
+                <h4 class="card-title">Create HouseHold</h4>
+                <form action="#" class="tab-wizard vertical wizard-circle">
+                    <!-- Step 1 -->
+                    <h6>HouseHold Info</h6>
+                    <section>
+                        <div class="row">
+
+                        </div>
+                    </section>
+                    <!-- Step 2 -->
+                    <h6>Add Bank Account </h6>
+                    <section id="bankAccountInputs">
+                        <div id="noAccounts">
+                            <h4 class="card-title">No Accounts added</h4>
+                            <h6 class="card-subtitle p-l-20">Press Add Account to Add a Bank Account</h6>
+                        </div>
+                        <div class="row-12 m-l-40 BankAccountTable" style="display:none">
+                            <div class="card card-default">
+                                <div class="card-body">
+                                    <h4 class="card-title"> Bank Accounts</h4>
+                                    <div class="table-responsive ">
+                                        <table id="AccountsTable" class="AccountsTable display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                                            <thead>
+                                                <tr>
+
+                                                    <th>Account Name</th>
+                                                    <th>Starting Balance</th>
+                                                    <th>Warning Balance</th>                                                    
+                                                </tr>
+                                            </thead>
+                                        </table>                                      
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="btn-Account-Add" class="btn btn-info" data-toggle="modal" data-target="#addBankAccount-modal"> <i class="fa fa-pencil"></i> Add New Account</button>
+                    </section>
+                    <!-- Step 3 -->
+                    <h6>Add Budget</h6>
+                    <section id="BudgetInputs">
+                        <div id="noBudget">
+                            <h4 class="card-title">No Budgets added</h4>
+                            <h6 class="card-subtitle p-l-20">Press Add Budget to Add a Budget</h6>
+                        </div>
+                        <div class="row-12 m-l-40 BankAccountTable" style="display:none">
+                            <div class="card card-default">
+                                <div class="card-body">
+                                    <h4 class="card-title"> Budgets</h4>
+                                    <div class="ticketInfo">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="btn-Account-Add" class="btn btn-info"> <i class="fa fa-pencil"></i> Add New Account</button>
+                    </section>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="addBankAccount-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Bank Account</h4>
+            </div>
+            <div class="modal-body">
+                    <div class="form-group">
+                        <label for="AccountName" class="control-label">Account Name:</label>
+                        <input type="text" class="form-control" id="AccountName">
+                    </div>
+                    <div class="form-group">
+                        <label for="StartingBalance" class="control-label">Starting Balance:</label>
+                        <input type="text" class="form-control" id="StartingBalance">
+                    </div>
+                    <div class="form-group">
+                        <label for="WarningBalance" class="control-label">Warning Balance:</label>
+                        <input type="text" class="form-control" id="WarningBalance">
+                    </div>
+                   
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="closeBankAcountModal"class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+                <button type="button" id="addBankAccountSave" class="btn btn-danger waves-effect waves-light">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+
+    <script>
+        class BankAccount { };
+        class Budget { };
+        var listOfBankAccounts = new Array();
+        var listOfBudgets = new Array();
+        $('#addBankAccountSave').on('click', function () {
+            var bankAccount = {
+                StartingBalance: $("#StartingBalance").val(),
+                WarningBalance: $("#WarningBalance").val(),
+                AccountName: $("#AccountName").val()
+            }
+            listOfBankAccounts.push(bankAccount);
+            $("#StartingBalance").val("");
+            $("#WarningBalance").val("");
+            $("#AccountName").val("");
+            $("#addBankAccount-modal").modal('hide');
+            BankAccountTable(listOfBankAccounts);
+        })
+        
+        function BankAccountTable(bankAccounts) {
+            var table = $('.AccountsTable').DataTable();
+            table.clear();
+            bankAccounts.forEach(function (bankAccount, index) {
+                table.row.add([
+                    bankAccount.AccountName, bankAccount.StartingBalance, bankAccount.WarningBalance
+                ]).draw().node().id = index;
+            })
+
+
+            $(".BankAccountTable").show();
+        }
+    </script>
+}

@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using RogueFinancialPortal.Extensions;
+using RogueFinancialPortal.Enums;
 
 namespace RogueFinancialPortal.Models
 {
@@ -30,17 +31,19 @@ namespace RogueFinancialPortal.Models
         public decimal WarningBalance { get; set; }
         [Display(Name = "Delete Account")]
         public bool IsDeleteted { get; set; }
+        public AccountType AccountType { get; set; }
         //public AccountType AccountType { get; set; }
         #endregion
         #region virtual
         public virtual ICollection<Transaction> Transactions { get; set; }
         #endregion
         #region Constructor
-        public BankAccount(decimal startingBalance, decimal warningBalance)
+        public BankAccount(decimal startingBalance, decimal warningBalance, string bankAccountName)
         {
             Transactions = new HashSet<Transaction>();
             StartingBalance = startingBalance;
             CurrentBalance = StartingBalance;
+            BankAccountName = bankAccountName;
             WarningBalance = warningBalance - 1000;
             Created = DateTime.Now;
             OwnerId = HttpContext.Current.User.Identity.GetUserId();
