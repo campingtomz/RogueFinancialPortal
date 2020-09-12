@@ -4,8 +4,11 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
+using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using RogueFinancialPortal.Extensions;
 using RogueFinancialPortal.Helpers;
@@ -14,6 +17,7 @@ using RogueFinancialPortal.ViewModels;
 
 namespace RogueFinancialPortal.Controllers
 {
+    [Authorize]
     public class HouseHoldsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -54,33 +58,66 @@ namespace RogueFinancialPortal.Controllers
             //}
             return View();
         }
-        //[HttpPost]
+        [HttpPost]
         //[ValidateAntiForgeryToken]
-        ////public ActionResult HouseHoldWizard(HouseHoldCreationWizardVM houseHold)
-        ////{
-        //    foreach (var bankAccount in houseHold.BankAccounts.ToList())
-        //    {
-        //        var newBankAccount = new BankAccount(bankAccount.StartingBalance, bankAccount.WarningBalance);
-        //        db.BankAccounts.Add(newBankAccount);
-               
-        //    }
-        //    foreach(var budget in houseHold.Budgets)
-        //    {
-        //        var newBudget = new Budget();
-        //        db.SaveChanges();
-        //        foreach(var budgetItems in budget.BudgetItems)
-        //        {
-        //            var budgetItem = new BudgetItem();
-        //            budgetItem.BudgetId = budgetItems.BudgetId;
-        //            budgetItem.TargetAmount = budgetItems.TargetAmount;
-        //            db.BudgetItems.Add(budgetItem);
+        public async System.Threading.Tasks.Task<ActionResult>  HouseHoldWizard(List<BankAccountWizardVM> BankAccounts, string Greeting, string HouseHoldName)
+        {
+            var user = db.Users.Find(User.Identity.GetUserId());
+            //if (user.HouseHoldId == null)
+            //{
+                HouseHold newHouseHold = new HouseHold(HouseHoldName, Greeting);
+                db.HouseHolds.Add(newHouseHold);
+                db.SaveChanges();
 
-        //        }
-        //        db.SaveChanges();
-        //    }
-        //    return View();
+                user.HouseHoldId = newHouseHold.Id;
+                roleHelper.UpdateUserRole(user.Id, "Head");
+                db.SaveChanges();
+                await AuthorizeExtensions.RefreshAuthentication(HttpContext, user);
 
-        //}
+                if (BankAccounts != null)
+                {
+                    foreach (var bankAccount in BankAccounts)
+                    {
+                        BankAccount newBankAccount = new BankAccount(bankAccount.StartingBalance, bankAccount.WarningBalance, bankAccount.BankAccountName);
+                        db.BankAccounts.Add(newBankAccount);
+                        db.SaveChanges();
+                        if (bankAccount.Budgets != null)
+                        {
+                            foreach (var budget in bankAccount.Budgets)
+                            {
+                                Budget newBudget = new Budget();
+                                newBudget.BudgetName = budget.BudgetName;
+                                newBudget.Description = budget.Description;
+                                newBudget.BankAccontId = newBankAccount.Id;
+
+                                db.Budgets.Add(newBudget);
+                                db.SaveChanges();
+
+                                if (budget.BudgetItems != null)
+                                {
+                                    foreach (var budgetItem in budget.BudgetItems)
+                                    {
+                                        BudgetItem newBudgetItem = new BudgetItem();
+                                        newBudgetItem.ItemName = budgetItem.ItemName;
+                                        newBudgetItem.Description = budgetItem.Description;
+                                        newBudgetItem.TargetAmount = budgetItem.TargetAmount;
+                                        newBudgetItem.BudgetId = newBudget.Id;
+
+
+                                        db.BudgetItems.Add(newBudgetItem);
+                                        db.SaveChanges();
+                                    }
+                                }
+                            }
+                        }
+
+                    //}
+                }
+            }
+
+            return RedirectToAction("Index", "Home");
+
+        }
         // POST: HouseHolds/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598. 
@@ -110,7 +147,7 @@ namespace RogueFinancialPortal.Controllers
 
             return View(houseHold);
         }
-        
+
 
         // GET: HouseHolds/Edit/5
         public ActionResult Edit(int? id)
@@ -145,6 +182,32 @@ namespace RogueFinancialPortal.Controllers
             return View(houseHold);
         }
 
+        //public async Task<ActionResult> LeaveAsync()
+        //{
+        //    var userId = User.Identity.GetUserId();
+        //    var user = db.Users.Find(userId);
+        //    var role = roleHelper.ListUserRoles(userId).FirstOrDefault();
+        //    switch (role)
+        //    {
+        //        case "Head":
+        //            var memberCount = db.Users.Where(u => u.HouseHoldId == user.HouseHoldId).Count() - 1;
+        //            if (memberCount >= 1)
+        //            {
+        //                TempData["Message"] = $"You are unable to leave the Household! there are still <b>{memberCount}<b> other members in the household, you must select one to replace you as head of Household";
+        //                ViewBag.Members = new SelectList(db.Users.Where(u => u.HouseHoldId == user.HouseHoldId).ToList(), "Id", "FullName");
+        //                ViewBag.Ishead = true;
+        //            }
+        //            return View();
+        //        case "Member":
+        //            ViewBag.Ishead = false;
+        //            return View();
+
+        //        default:
+        //            return RedirectToAction("index", "Home");
+
+        //    }
+        //}
+
         // GET: HouseHolds/Delete/5
         public ActionResult Delete(int? id)
         {
@@ -159,6 +222,45 @@ namespace RogueFinancialPortal.Controllers
             }
             return View(houseHold);
         }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> LeaveAsync()
+        //{
+        //    var userId = User.Identity.GetUserId();
+        //    var user = db.Users.Find(userId);
+        //    var role = roleHelper.ListUserRoles(userId).FirstOrDefault();
+        //    switch (role)
+        //    {
+        //        case "Head":
+        //            var memberCount = db.Users.Where(u => u.HouseHoldId == user.HouseHoldId).Count() - 1;
+        //            if(memberCount >= 1)
+        //            {
+        //                TempData["Message"] = $"You are unable to leave the Household! there are still <b>{memberCount}<b> other members in the household, you must select one to replace you as head of Household";
+        //                return RedirectToAction("ExitDenied");
+        //            }
+        //            user.HouseHold.IsDeleted = true;  
+        //            user.HouseHoldId = null;
+
+        //            //var household = db.HouseHolds.Find(user.HouseHoldId);
+        //            //db.HouseHolds.Remove(household);
+        //            db.SaveChanges();
+        //            roleHelper.UpdateUserRole(userId, "Default");
+        //            await AuthorizeExtensions.RefreshAuthentication(HttpContext, user);
+        //            return RedirectToAction("Index", "Home");
+                    
+        //        case "Member":
+        //            user.HouseHoldId = null;
+
+        //            db.SaveChanges();
+        //            roleHelper.UpdateUserRole(userId, "Default");
+        //            await AuthorizeExtensions.RefreshAuthentication(HttpContext, user);
+        //            return RedirectToAction("Index", "Home");
+        //        default:
+        //            return RedirectToAction("index","Home");
+
+
+        //    }
+        //}
 
         // POST: HouseHolds/Delete/5
         [HttpPost, ActionName("Delete")]

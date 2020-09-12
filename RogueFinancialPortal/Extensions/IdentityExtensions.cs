@@ -11,10 +11,10 @@ namespace RogueFinancialPortal.Extensions
     {
         public static int? GetHouseHoldId(this IIdentity user){
             var claimsIdentity = (ClaimsIdentity)user;
-            var houseHoldClaim = claimsIdentity.Claims.FirstOrDefault(c => c.Type == "HouseHoldId");
-            if (houseHoldClaim != null)
+            var householdClaim = claimsIdentity.Claims.FirstOrDefault(c => c.Type == "HouseHoldId");
+            if (householdClaim != null)
             {
-                var result = houseHoldClaim.Value != " " ? int.Parse(houseHoldClaim.Value):0;
+                var result = householdClaim.Value != "" ? int.Parse(householdClaim.Value) : 0;
                 return result;
             }
             else

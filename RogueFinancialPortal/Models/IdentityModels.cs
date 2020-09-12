@@ -85,7 +85,6 @@ namespace RogueFinancialPortal.Models
             userIdentity.AddClaim(new Claim("AvatarPath", AvatarPath));
             userIdentity.AddClaim(new Claim("FirstName", FirstName));
             userIdentity.AddClaim(new Claim("LastName", LastName));
-
             userIdentity.AddClaim(new Claim("HouseHoldId", hhId));
 
             // Add custom user claims here

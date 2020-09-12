@@ -22,7 +22,7 @@ $(".validation-wizard").steps({
     , transitionEffect: "fade"
     , titleTemplate: '<span class="step">#index#</span> #title#'
     , labels: {
-        finish: "Submit"
+        finish: "Submiting"
     }
     , onStepChanging: function (event, currentIndex, newIndex) {
         return currentIndex > newIndex || !(3 === newIndex && Number($("#age-2").val()) < 18) && (currentIndex < newIndex && (form.find(".body:eq(" + newIndex + ") label.error").remove(), form.find(".body:eq(" + newIndex + ") .error").removeClass("error")), form.validate().settings.ignore = ":disabled,:hidden", form.valid())

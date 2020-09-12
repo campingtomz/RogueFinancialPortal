@@ -15,15 +15,18 @@ using System.Web.Configuration;
 using System.Net.Mail;
 using System.EnterpriseServices;
 
+using RogueFinancialPortal.Extensions;
 
 namespace RogueFinancialPortal.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
+        private static ApplicationDbContext db = new ApplicationDbContext();
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private FileUploadValidator fileUploadValidator = new FileUploadValidator();
+        private UserRoleHelper roleHelper = new UserRoleHelper();
 
 
         public AccountController()
@@ -65,6 +68,10 @@ namespace RogueFinancialPortal.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                AuthorizeExtensions.AutoLogOut(HttpContext);
+            }
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
@@ -235,9 +242,138 @@ namespace RogueFinancialPortal.Controllers
             }
 
             // If we got this far, something failed, redisplay form
+           
+
+            return RedirectToAction("Login", "Account");
+        } 
+        
+        
+        [AllowAnonymous]
+         public ActionResult AcceptInvitaiton(string recipientEmail, string code)
+        {
+            var realGuid = Guid.Parse(code);
+            if (UserManager.FindByEmail(recipientEmail) == null)
+            {
+                var invitation = db.Invitations.FirstOrDefault(i => i.RecipientEmail == recipientEmail && i.Code == realGuid);
+                if (invitation == null)
+                {
+                    return View("InvitationError", "Account", new { error = 1 });
+                }
+                var expirationDate = invitation.Created.AddDays(invitation.TTL);
+                if (invitation.IsValid && DateTime.Now < expirationDate)
+                {
+                    var houseHoldName = db.HouseHolds.Find(invitation.HouseHoldId).HouseHoldName;
+                    ViewBag.Greeting = $"Thank you for accepting my invitaion to join the {houseHoldName} House!";
+                    var model = new AcceptInvitationViewModel()
+                    {
+                        InvitationId = invitation.Id,
+                        Email = recipientEmail,
+                        Code = realGuid,
+                        HouseholdId = invitation.HouseHoldId
+                    };
+                    return View(model);
+                }
+                return View("InvitationError", "Account", new { error = 2 });
+
+
+            }
+            return RedirectToAction("ManualJoin", "Account", new { code });
+        }
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AcceptInvitaiton(AcceptInvitationViewModel model)
+        {
+
+            if (ModelState.IsValid)
+            {
+                var user = new ApplicationUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    HouseHoldId = model.HouseholdId,
+                };
+                if (model.Avatar != null)
+                {
+                    if (FileUploadValidator.IsWebFriendlyImage(model.Avatar))
+                    {
+                        var fileName = FileStamp.MakeUnique(model.Avatar.FileName);
+                        var AvatarFolder = WebConfigurationManager.AppSettings["DefaultAvatarFolder"];
+                        model.Avatar.SaveAs(Path.Combine(Server.MapPath(AvatarFolder), fileName));
+                        user.AvatarPath = $"{AvatarFolder}{fileName}";
+                    }
+                }
+
+                var result = await UserManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    UserManager.AddToRole(user.Id, "Member");
+                    InvitationHelper.MarkAsInvaild(model.InvitationId);
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    return RedirectToAction("Index", "Home");
+                }
+                AddErrors(result);
+            }
+
+            // If we got this far, something failed, redisplay form
+
+
             return RedirectToAction("Login", "Account");
         }
 
+
+        [Authorize(Roles = "Default")]
+        [HttpPost]
+        public async Task<ActionResult> ManualJoin(string code) {
+            var user = db.Users.Find(User.Identity.GetUserId());
+            if (user.HouseHoldId == null)
+            {
+                var realGuid = Guid.Parse(code);
+                var invitation = db.Invitations.FirstOrDefault(i => i.RecipientEmail == user.Email && i.Code == realGuid);
+                if (invitation == null)
+                {
+                    return View("InvitationError", "Account", new { error = 1 });
+
+                }
+                var expirationDate = invitation.Created.AddDays(invitation.TTL);
+                if (invitation.IsValid && DateTime.Now < expirationDate)
+                {
+                    InvitationHelper.MarkAsInvaild(invitation.Id);
+                    user.HouseHoldId = invitation.HouseHoldId;
+
+                    roleHelper.UpdateUserRole(user.Id, "Member");
+
+                    await AuthorizeExtensions.RefreshAuthentication(HttpContext, user);
+
+                    return RedirectToAction("Index", "Home");
+                }
+
+                return View("InvitationError", "Account", new { error = 2 });
+            }
+
+            return View("InvitationError", "Account", new {error = 3 });
+        }
+        public ActionResult InvitationError(int error)
+        {
+            switch (error){
+                case 1:
+                    ViewBag.Error = "The Invitation Does not Exist";
+                break;
+                case 2:
+                   ViewBag.Error = "The Invitation is no Longer Vaild, Please request a new Invitation from head of HouseHold";
+                break;
+                case 3:
+                    ViewBag.Error = "You are currently in a HouseHold. Please leave the current House Hold and then Join the new one. ";
+                break;
+                default:
+                    break;
+            }
+            return View();
+        }
         //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]
@@ -251,6 +387,10 @@ namespace RogueFinancialPortal.Controllers
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
 
         }
+
+  
+
+
         public ActionResult ResendEmailConfirmation()
         {
             return View();

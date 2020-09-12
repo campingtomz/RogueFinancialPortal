@@ -7,9 +7,12 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using RogueFinancialPortal.Models;
+using RogueFinancialPortal.ViewModels;
+
 
 namespace RogueFinancialPortal.Controllers
 {
+    [Authorize]
     public class BankAccountsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -39,8 +42,7 @@ namespace RogueFinancialPortal.Controllers
         // GET: BankAccounts/Create
         public ActionResult Create()
         {
-            ViewBag.HouseHoldId = new SelectList(db.HouseHolds, "Id", "OwnerId");
-            ViewBag.OwnerId = new SelectList(db.Users, "Id", "FirstName");
+            
             return View();
         }
 
@@ -49,18 +51,17 @@ namespace RogueFinancialPortal.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,HouseHoldId,OwnerId,BankAccountName,Created,StartingBalance,CurrentBalance,WarningBalance,IsDeleteted")] BankAccount bankAccount)
+        public ActionResult Create([BindAttribute(Include = "StartingBalance,WarningBalance,AccountName, AccountType")] BankAccountWizardVM bankAccountVM)
         {
             if (ModelState.IsValid)
             {
+                BankAccount bankAccount = new BankAccount(bankAccountVM.StartingBalance, bankAccountVM.WarningBalance, bankAccountVM.BankAccountName);
+                bankAccount.AccountType = bankAccountVM.AccountType;
                 db.BankAccounts.Add(bankAccount);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
-            ViewBag.HouseHoldId = new SelectList(db.HouseHolds, "Id", "OwnerId", bankAccount.HouseHoldId);
-            ViewBag.OwnerId = new SelectList(db.Users, "Id", "FirstName", bankAccount.OwnerId);
-            return View(bankAccount);
+            return View(bankAccountVM);
         }
 
         // GET: BankAccounts/Edit/5

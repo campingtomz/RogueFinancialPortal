@@ -22,6 +22,7 @@ namespace RogueFinancialPortal.Models
         [Display(Name = "Name")]
         public string ItemName { get; set; }
         public DateTime Created { get; set; }
+        public string Description { get; set; }
 
         [Display(Name = "Currnet Amount")]
         public decimal CurrnetAmount { get; set; }
@@ -43,7 +44,9 @@ namespace RogueFinancialPortal.Models
             Created = DateTime.Now;
             OwnerId = HttpContext.Current.User.Identity.GetUserId();
         }
+        public BudgetItem(bool inSeed)
+        { }
 
-        #endregion
-    }
+            #endregion
+        }
 }

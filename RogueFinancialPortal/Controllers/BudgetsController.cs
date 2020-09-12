@@ -2,14 +2,18 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using RogueFinancialPortal.Extensions;
+
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using RogueFinancialPortal.Models;
+using RogueFinancialPortal.ViewModels;
 
 namespace RogueFinancialPortal.Controllers
 {
+    [Authorize]
     public class BudgetsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -39,8 +43,12 @@ namespace RogueFinancialPortal.Controllers
         // GET: Budgets/Create
         public ActionResult Create()
         {
-            ViewBag.HouseHoldId = new SelectList(db.HouseHolds, "Id", "OwnerId");
-            ViewBag.OwnerId = new SelectList(db.Users, "Id", "FirstName");
+            var BankAccounts = db.HouseHolds.Find(User.Identity.GetHouseHoldId()).BankAccounts.ToList();
+            if (BankAccounts.Count > 0 || BankAccounts != null)
+            {
+                ViewBag.AccountName = new SelectList(BankAccounts, "Id", "BankAccountName");
+                return View();
+            }
             return View();
         }
 
@@ -49,17 +57,22 @@ namespace RogueFinancialPortal.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,HouseHoldId,OwnerId,BudgetName,Created,CurrnetAmount")] Budget budget)
+        public ActionResult Create([Bind(Include = "BudgetName,Description")] BudgetWizardVM budget, int AccountName)
         {
             if (ModelState.IsValid)
             {
-                db.Budgets.Add(budget);
+                Budget newBudget = new Budget();
+                newBudget.BudgetName = budget.BudgetName;
+                newBudget.Description = budget.Description;
+                newBudget.BankAccontId = AccountName;
+
+                db.Budgets.Add(newBudget);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            var BankAccounts = db.HouseHolds.Find(User.Identity.GetHouseHoldId()).BankAccounts.ToList();
+            ViewBag.AccountName = new SelectList(BankAccounts, "Id", "BankAccountName");
 
-            ViewBag.HouseHoldId = new SelectList(db.HouseHolds, "Id", "OwnerId", budget.HouseHoldId);
-            ViewBag.OwnerId = new SelectList(db.Users, "Id", "FirstName", budget.OwnerId);
             return View(budget);
         }
 

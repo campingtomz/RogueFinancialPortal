@@ -30,7 +30,7 @@ namespace RogueFinancialPortal.Models
         [Display(Name = "Warning Balance")]
         public decimal WarningBalance { get; set; }
         [Display(Name = "Delete Account")]
-        public bool IsDeleteted { get; set; }
+        public bool IsDeleted { get; set; }
         public AccountType AccountType { get; set; }
         //public AccountType AccountType { get; set; }
         #endregion
@@ -42,9 +42,9 @@ namespace RogueFinancialPortal.Models
         {
             Transactions = new HashSet<Transaction>();
             StartingBalance = startingBalance;
-            CurrentBalance = StartingBalance;
+            CurrentBalance = startingBalance;
             BankAccountName = bankAccountName;
-            WarningBalance = warningBalance - 1000;
+            WarningBalance = warningBalance;
             Created = DateTime.Now;
             OwnerId = HttpContext.Current.User.Identity.GetUserId();
             HouseHoldId = (int)HttpContext.Current.User.Identity.GetHouseHoldId();

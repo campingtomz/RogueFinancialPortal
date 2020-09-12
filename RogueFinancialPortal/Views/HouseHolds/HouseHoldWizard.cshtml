@@ -9,134 +9,546 @@
     @Html.ValidationSummary(true, "", new { @class = "test-danger" })
     @Html.HiddenFor(model => model.HouseHoldId)*@
 
+
 <div class="row">
     <div class="col-12">
-        <div class="card">
-            <div class="card-body wizard-content">
-                <h4 class="card-title">Create HouseHold</h4>
-                <form action="#" class="tab-wizard vertical wizard-circle">
-                    <!-- Step 1 -->
-                    <h6>HouseHold Info</h6>
-                    <section>
-                        <div class="row">
+        <div class="card-body wizard-content">
+            <h4 class="card-title">Create HouseHold</h4>
+            <div action="#" class="tab-wizard vertical wizard-circle">
+                @*@using (Html.BeginForm("ProjectWizard", "Projects", FormMethod.Post, new { @class = "tab-wizard  vertical  wizard-circle" }))
+                    {*@
 
-                        </div>
-                    </section>
-                    <!-- Step 2 -->
-                    <h6>Add Bank Account </h6>
-                    <section id="bankAccountInputs">
-                        <div id="noAccounts">
-                            <h4 class="card-title">No Accounts added</h4>
-                            <h6 class="card-subtitle p-l-20">Press Add Account to Add a Bank Account</h6>
-                        </div>
-                        <div class="row-12 m-l-40 BankAccountTable" style="display:none">
-                            <div class="card card-default">
+
+                <h6>HouseHold Info</h6>
+                <section>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="card">
                                 <div class="card-body">
-                                    <h4 class="card-title"> Bank Accounts</h4>
-                                    <div class="table-responsive ">
-                                        <table id="AccountsTable" class="AccountsTable display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
-                                            <thead>
-                                                <tr>
-
-                                                    <th>Account Name</th>
-                                                    <th>Starting Balance</th>
-                                                    <th>Warning Balance</th>                                                    
-                                                </tr>
-                                            </thead>
-                                        </table>                                      
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group ">
+                                                <label for="HouseHoldName" class="control-label">HouseHold Name:<span class="text-danger"> *</span></label>
+                                                <input type="text" class="form-control HouseHoldName" id="HouseHoldName" placeholder="Enter a HouseHold Name">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="HouseHoldGreeting" class="control-label">Custom Greeting:</label>
+                                                <textarea type="text" class="form-control HouseHoldGreeting" id="HouseHoldGreeting" rows="4" cols="50" placeholder="Enter a Custom Greeting for new Members!"></textarea>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <button id="btn-Account-Add" class="btn btn-info" data-toggle="modal" data-target="#addBankAccount-modal"> <i class="fa fa-pencil"></i> Add New Account</button>
-                    </section>
-                    <!-- Step 3 -->
-                    <h6>Add Budget</h6>
-                    <section id="BudgetInputs">
-                        <div id="noBudget">
-                            <h4 class="card-title">No Budgets added</h4>
-                            <h6 class="card-subtitle p-l-20">Press Add Budget to Add a Budget</h6>
-                        </div>
-                        <div class="row-12 m-l-40 BankAccountTable" style="display:none">
-                            <div class="card card-default">
+                        <div class="col-6">
+                            <div class="card">
                                 <div class="card-body">
-                                    <h4 class="card-title"> Budgets</h4>
-                                    <div class="ticketInfo">
+                                    <div class="container">
+                                        <h3>Bank Account</h3>
+                                        <p>
+                                            The HouseHold is used to Manage your expenses and budgets<br />
+                                            Add a HouseHold Name Ex: Home, Apartment<br />
+                                            Add a Custom Greeting. This greeting will be displayed to invited Members<br />
+                                            A household Name is required.  BankAccount, Budgets and Budget Items are not required<br />
+                                            If you do not wish to add a BankAccount, Budget orBudget Item. Just click next.<br />
+                                            Then can be added Later
+
+                                        </p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <button id="btn-Account-Add" class="btn btn-info"> <i class="fa fa-pencil"></i> Add New Account</button>
-                    </section>
+                    </div>
+                </section>
+                <!-- Step 2 -->
+                <h6>Add Bank Account </h6>
+                <section id="bankAccountInputs">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="col">
+                                        <div id="noAccounts">
+                                            <h4 class="card-title">No Accounts added</h4>
+                                            <h6 class="card-subtitle p-l-20">Fill out form below to add a Bank Account</h6>
+                                        </div>
+                                        <div class="row  BankAccountTable" style="display:none">
+                                            <div class="card card-default">
+                                                <div class="card-body">
+                                                    <h4 class="card-title"> Bank Accounts</h4>
+                                                    <div class="table-responsive ">
+                                                        <table id="AccountsTable" class="AccountsTable display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                                                            <thead>
+                                                                <tr>
 
-                </form>
+                                                                    <th>Account Name</th>
+                                                                    <th>Starting Balance</th>
+                                                                    <th>Warning Balance</th>
+                                                                    <th>Options</th>
+                                                                </tr>
+                                                            </thead>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="form-group ">
+                                                    <label for="AccountName" class="control-label">Account Name:<span class="text-danger"> *</span></label>
+                                                    <input type="text" class="form-control accountInput input" id="AccountName" placeholder="Enter a Account Name">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="form-group">
+
+                                                    <label for="StartingBalance" class="control-label">Starting Balance:<span class="text-danger"> *</span></label>
+                                                    <input type="text" class="form-control accountInput input" id="StartingBalance" placeholder="Enter a vaild Number" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="form-group">
+                                                    <label for="WarningBalance" class="control-label">Warning Balance:<span class="text-danger"> *</span></label>
+                                                    <input type="text" class="form-control accountInput input" id="WarningBalance" placeholder="Enter a vaild Number">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <button id="btn-Account-Add" type="button" class="btn btn-info m-t-20"> <i class="fa fa-pencil"></i> Add New Account</button>
+
+                                        <div clase="row">
+                                            <label class="text-danger validationErrorAdd m-t-20" style="display:none">Check Input Values.</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="container">
+                                        <h3>Bank Account</h3>
+                                        <p>
+                                            To create a Bank Account. Fill out the form.<br />
+                                            Give the account a name such as Savings, Checking, Checking two, MoneyMarket..etc.<br />
+                                            Add a Starting Balance, this is the starting balance in your Account.<br />
+                                            Add a Warning Balance, this value is used to generate an Alert/Notification when your Bank Account Balance reaches this Amount<br />
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- Step 3 -->
+                <h6>Add Budget</h6>
+                <section id="BudgetInputs">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 id="BudgetDisplayTitle" style="display:none" class="card-title">Budgets</h4>
+
+                                    <h4 id="noBudgetDisplay" class="card-title">No Budgets added</h4>
+                                    <div id="BudgetDisplay">
+                                    </div>
+                                    <h6 class="card-subtitle p-l-20"> Add Budget:</h6>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="BudgetName" class="control-label">Budget Name:<span class="text-danger"> *</span></label>
+                                                <input type="text" class="form-control budgetInput input" id="BudgetName" placeholder="Enter a Budget Name">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="BudgetName" class="control-label">Budget Description:</label>
+                                                <textarea type="text" class="form-control budgetInput input" id="BudgetDescription" rows="4" cols="50" placeholder="Enter a Description about the budget, Ex: Utilites, Food, Entertainment...etc"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="bankAccountList" class="control-label">Bank Accounts:</label>
+                                                <select name="bankAccountList" id="bankAccountList" class="form-control">
+                                                    <option value="4">-No-Accounts-Created</option>
+                                                </select>
+                                                <label class="text-danger validationBankAccount m-t-20" style="display:none">Please Create a Bank Account.</label>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button id="btn-Budget-Add" type="button" class="btn btn-info m-t-20"> <i class="fa fa-pencil"></i> Add New Budget</button>
+                                    <div clase="row">
+                                        <label class="text-danger validationErrorAdd m-t-20" style="display:none">Check Input Values.</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="container">
+                                        <h3>Budges</h3>
+                                        <p>
+                                            The Budget is the Category of your spending. An example is: Food, Entertainment, Utiliets....etc.<br />
+                                            A Bank Account is needed to Create a Budget!
+
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
+                <h6>Add Budget Items</h6>
+                <section id="BudgetItemsInputs">
+                    <div class="row">
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title">Budgets:</h4>
+                                    <div id="BudgetItemsDisplay">
+
+                                    </div>
+                                    <h6 class="card-subtitle p-l-20"> Add Budget items:</h6>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="BudgetItemName" class="control-label">Budget Item Name: <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control budgetItemsInput input" id="BudgetItemName" placeholder="Enter a Name">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+
+                                                <label for="BudgetItemTargetAmount" class="control-label">Budget Target Amount: <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control budgetItemsInput input" id="BudgetItemTargetAmount" placeholder="Enter a vaild Number">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+
+                                                <label for="BudgetItemDescription" class="control-label">Budget Item Description: <span class="text-danger">*</span></label>
+                                                <textarea type="text" class="form-control budgetItemsInput input" id="BudgetItemDescription" rows="4" cols="50" placeholder="Enter a Description about the budget item"></textarea>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+
+                                                <label for="BudgetList" class="control-label">Budgets:</label>
+                                                <select name="BudgetList" id="BudgetList" class="form-control">
+                                                    <option value="4">-No-budgets-Created</option>
+                                                </select>
+                                                <label class="text-danger validationBudgets m-t-20" style="display:none">Please Create a Bank Account.</label>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button id="btn-BudgetItems-Add" type="button" class="btn btn-info m-t-20"> <i class="fa fa-pencil"></i> Add New Item</button>
+                                    <div clase="row">
+                                        <label class="text-danger validationErrorAdd m-t-20" style="display:none">Check Input Values.</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="container">
+                                        <h3>Budget Items</h3>
+                                        <p>
+                                            The Budget Item is subcategory of your Budget Ex: <br />
+                                            If you have a Budget for Food, a budget Item would be: Take out, Groceries, Eating Out<br />
+                                            The Target Ammount is how much you want to or expect to spend in that Item.<br />
+                                            Example: A budget of Food. With a Budget Item of Groceries might have a limit of $600 or Savings budget where you want to add $300.<br />
+                                            A Budget is needed to Create a Budget Item!
+
+
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                @*}*@
             </div>
+
         </div>
     </div>
 </div>
 
-<div id="addBankAccount-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Add Bank Account</h4>
-            </div>
-            <div class="modal-body">
-                    <div class="form-group">
-                        <label for="AccountName" class="control-label">Account Name:</label>
-                        <input type="text" class="form-control" id="AccountName">
-                    </div>
-                    <div class="form-group">
-                        <label for="StartingBalance" class="control-label">Starting Balance:</label>
-                        <input type="text" class="form-control" id="StartingBalance">
-                    </div>
-                    <div class="form-group">
-                        <label for="WarningBalance" class="control-label">Warning Balance:</label>
-                        <input type="text" class="form-control" id="WarningBalance">
-                    </div>
-                   
 
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="closeBankAcountModal"class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
-                <button type="button" id="addBankAccountSave" class="btn btn-danger waves-effect waves-light">Save changes</button>
-            </div>
-        </div>
-    </div>
-</div>
+
 
 @section scripts{
 
     <script>
-        class BankAccount { };
-        class Budget { };
-        var listOfBankAccounts = new Array();
-        var listOfBudgets = new Array();
-        $('#addBankAccountSave').on('click', function () {
-            var bankAccount = {
-                StartingBalance: $("#StartingBalance").val(),
-                WarningBalance: $("#WarningBalance").val(),
-                AccountName: $("#AccountName").val()
-            }
-            listOfBankAccounts.push(bankAccount);
-            $("#StartingBalance").val("");
-            $("#WarningBalance").val("");
-            $("#AccountName").val("");
-            $("#addBankAccount-modal").modal('hide');
-            BankAccountTable(listOfBankAccounts);
-        })
-        
-        function BankAccountTable(bankAccounts) {
-            var table = $('.AccountsTable').DataTable();
-            table.clear();
-            bankAccounts.forEach(function (bankAccount, index) {
-                table.row.add([
-                    bankAccount.AccountName, bankAccount.StartingBalance, bankAccount.WarningBalance
-                ]).draw().node().id = index;
-            })
+
+        $(document).ready(function () {
+            var listOfBankAccounts = new Array();
+            var listOfBudgets = new Array();
+                $(".tab-wizard").steps({
+                    headerTag: "h6",
+                    bodyTag: "section",
+                    transitionEffect: "fade",
+                    titleTemplate: '<span class="step">#index#</span> #title#',
+                    labels: {
+                        finish: "Submit"
+                    },
+                    onFinished: function (event, currentIndex) {
+
+                        if (checkValid('.HouseHoldName')) {
+                            listOfBudgets.forEach(function (budget) {
+                                listOfBankAccounts[budget.BankAccount].Budgets.push(budget);
+                            })
+                            var url = '@Url.Action("HouseHoldWizard", "HouseHolds")'
+                            
+                            $.ajax({
+                                type: 'POST',
+                                url: url,
+                                data: JSON.stringify({ 'BankAccounts': listOfBankAccounts, 'Greeting': $('#HouseHoldGreeting').val(), 'HouseHoldName': $('#HouseHoldName').val()}),
+                                dataType: 'json',
+                                contentType: "application/json; charset=utf-8",
+                                success: function () {
+                                },
+                                error: function () {
+                                }
+                            });
+                            //form.submit();
+                        }
+                        else {
+                            alert("Please enter a valid House Hold Name");
+                        }
+                    }
+                });
 
 
-            $(".BankAccountTable").show();
-        }
+                $(".input").change(function () {
+                    var parent = $(this).closest('div');
+                    parent.removeClass("error");
+                    parent.find(".validationError").remove();
+                });
+                $('#btn-Account-Add').on('click', function () {
+                    if (checkValid('.accountInput') && $.isNumeric($("#StartingBalance").val()) && $.isNumeric($("#WarningBalance").val())) {
+                        var length = listOfBankAccounts.length;
+                        var bankAccount = {
+                            StartingBalance: $("#StartingBalance").val(),
+                            WarningBalance: $("#WarningBalance").val(),
+                            AccountName: $("#AccountName").val(),
+                            AccountJsId: length, //current length of the listOfBankAccounts array used to acces the position of this object
+                            Budgets: []
+                        }
+                        listOfBankAccounts.push(bankAccount);
+                        BankAccountTable(listOfBankAccounts);
+                        LoadBankAccountDropDown(listOfBankAccounts);
+                        $("#StartingBalance").val("");
+                        $("#WarningBalance").val("");
+                        $("#AccountName").val("");
+                        $(this).parent().find(".validationErrorAdd").hide()
+                        $('.validationBankAccount').hide();
+
+                    }
+                    else {
+                        $(this).parent().find(".validationErrorAdd").show()
+                    }
+
+
+                });
+                $('#RemoveAccount').on('click', function () {
+                    alert("test")
+                    var index = this.id;
+                    alert(index)
+                });
+                $('#btn-Budget-Add').on('click', function () {
+                    if (checkValid('.budgetInput') && listOfBankAccounts.length > 0) {
+
+                        var Budget = {
+                            BudgetName: $("#BudgetName").val(),
+                            BankAccount: $('#bankAccountList option:selected').val(),
+                            Description: $("#BudgetDescription").val(),
+                            budgetJsId: listOfBudgets.length,
+                            BudgetItems: []
+                        }
+                        $("#BudgetName").val("")
+                        $("#BudgetDescription").val("Enter a Description about the budget, Ex: Utilites, Food, Entertainment...etc");
+                        $(".validationBudgets").hide();
+                        listOfBudgets.push(Budget)
+
+                        loadBudgets(listOfBudgets);
+                        LoadBudgetsDropDown(listOfBudgets);
+                        loadBudgetsItems(listOfBudgets);
+                    }
+                    else {
+                        if (listOfBankAccounts.length < 1) {
+                            $(".validationBankAccount").show();
+                        }
+
+                }
+
+                });
+            $('#btn-BudgetItems-Add').on('click', function () {
+                if (checkValid('.budgetItemsInput') && $.isNumeric($("#BudgetItemTargetAmount").val()) && listOfBudgets.length > 0) {
+                        var BudgetItem = {
+                            ItemName: $("#BudgetItemName").val(),
+                            TargetAmount: $("#BudgetItemTargetAmount").val(),
+                            BudgetId: $('#BudgetList option:selected').val(),
+                            Description: $("#BudgetItemDescription").val(),
+                            budgetJsId: listOfBudgets[$('#BudgetList option:selected').val()].BudgetItems.length
+                        }
+                        listOfBudgets[BudgetItem.BudgetId].BudgetItems.push(BudgetItem)
+                        console.log(listOfBudgets)
+                        $("#BudgetItemName").val("")
+                        $("#BudgetItemDescription").val("Enter a Description about the budget Item");
+                        $("#BudgetItemTargetAmount").val("")
+                        loadBudgetsItems(listOfBudgets);
+                        $(this).parent().find(".validationErrorAdd").hide()
+                    }
+                else {
+                    if (listOfBudgets.length < 1) {
+                        $(".validationBudgets").show();
+
+                    }
+                    if (!$.isNumeric($("#BudgetItemTargetAmount").val())) {
+                        $(this).parent().find(".validationErrorAdd").show();
+
+                    }
+                }
+
+
+                });
+
+                function BankAccountTable(bankAccounts) {
+                    var table = $('.AccountsTable').DataTable();
+                    table.clear();
+                    var index = 0;
+                    bankAccounts.forEach(function (bankAccount) {
+                        table.row.add([
+                            bankAccount.AccountName, bankAccount.StartingBalance, bankAccount.WarningBalance, `<button id="RemoveAccount" value="${index}"class="RemoveAccount btn danger">Remove</button>`
+
+                        ]).draw().node().id = index;
+                        index += 1;
+                    })
+
+                    $("#noAccounts").hide();
+                    $(".BankAccountTable").show();
+                }
+                function LoadBankAccountDropDown(bankAccounts) {
+                    if (bankAccounts.length > 0) {
+                        $("#bankAccountList").empty();
+
+
+                        bankAccounts.forEach(function (bankAccount) {
+                            $("#bankAccountList").append(`<option value="${bankAccount.AccountJsId}">${bankAccount.AccountName}</option>`)
+                        })
+                    }
+
+                }
+                function LoadBudgetsDropDown(listOfBudgets) {
+                    $("#BudgetList").empty();
+                    if (listOfBudgets.length > 0) {
+                        listOfBudgets.forEach(function (budget) {
+                            $("#BudgetList").append(`<option value="${budget.budgetJsId}">${budget.BudgetName}</option>`)
+                        })
+                    }
+
+
+
+                }
+                function loadBudgets(listOfBudgets) {
+                    $("#noBudgetDisplay").hide();
+                    $("#BudgetDisplayTitle").show();
+
+                    $("#BudgetDisplay").empty();
+                    listOfBudgets.forEach(function (budgets) {
+                        $("#BudgetDisplay").append(
+                            `<div class="row p-l-20">
+                                                                                                        <div class="col-6">
+                                                                                                            <h4 class="card-title">Budget: ${budgets.BudgetName}</h4>
+                                                                                                                <h6 class="card-subtitle p-l-20">Description: ${budgets.Description}</h6>
+                                                                                                       </div>
+                                                                                                    </div>
+                                                                                                  <hr/>`);
+
+                    })
+                }
+                function loadBudgetsItems(listOfBudgets) {
+                    $("#BudgetItemsDisplay").empty();
+
+                    listOfBudgets.forEach(function (budget) {
+                        var budgetItemDisplay = "";
+                        if (budget.BudgetItems.length > 0) {
+                            budget.BudgetItems.forEach(function (budgetItem) {
+                                budgetItemDisplay = budgetItemDisplay.concat(`<div class="row">
+                                                                                                    <h5 class="card-subtitle p-l-20">Item : ${budgetItem.ItemName}</h5>
+                                                                                                    </div>
+                                                                                                    <div class="row">
+                                                                                                    <h6 class="card-subtitle m-l-40"> Amount: ${budgetItem.TargetAmount}</h6>
+                                                                                                    </div>
+                                                                                                    <div class="row">
+                                                                                                    <h6 class="card-subtitle m-l-40">Description: ${budgetItem.Description}</h6>
+                                                                                                </div>`);
+
+
+                            })
+                        } else {
+                            budgetItemDisplay = `<h6 class="card-subtitle p-l-20">No Budge Items Added</h6>`;
+                        }
+
+                        $("#BudgetItemsDisplay").append(
+                            `<div class="row p-l-20">
+                                                                                                        <div id="${budget.budgetJsId}" class="col-6">
+                                                                                                            <h4 class="card-title">Budget: ${budget.BudgetName}</h4>
+                                                                                                            ${budgetItemDisplay}
+                                                                                                       </div>
+                                                                                                    </div>
+                                                                                                  <hr/>`);
+                    })
+                }
+                function checkValid(entry) {
+                    var isValid = true;
+                    $(entry).each(function () {
+                        if (!$(this).val() || $(this).val().length === 0 || $(this).val().match(/^ *$/) !== null) {
+                            var parent = $(this).closest('div');
+                            parent.addClass("error");
+                            if (parent.find(".validationError").length === 0) {
+                                parent.append('<label  class="text-danger validationError" >This field is required.</label>');
+                            }
+                            isValid = false;
+                        }
+
+                    })
+                    return isValid;
+                }
+
+
+            });
     </script>
 }

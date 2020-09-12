@@ -43,6 +43,14 @@ namespace RogueFinancialPortal.Models
             OwnerId = HttpContext.Current.User.Identity.GetUserId();
             TTL = 3;
         }
+        public Invitation(int hhId)
+        {
+            IsValid = true;
+            Created = DateTime.Now;
+            OwnerId = HttpContext.Current.User.Identity.GetUserId();
+            HouseHoldId = hhId;
+            TTL = 3;
+        }
 
         #endregion
     }

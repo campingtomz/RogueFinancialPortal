@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Identity;
+using RogueFinancialPortal.Extensions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -18,6 +19,8 @@ namespace RogueFinancialPortal.Models
         #region Parents/Children
         public int HouseHoldId { get; set; }
         public string OwnerId { get; set; }
+        public int BankAccontId { get; set; }
+        public string Description { get; set; }
         public virtual HouseHold HouseHold { get; set; }
         public virtual ApplicationUser Owner { get; set; }
 
@@ -25,6 +28,7 @@ namespace RogueFinancialPortal.Models
         #region Actual Properties
         [Display(Name = "Name")]
         public string BudgetName { get; set; }
+
         public DateTime Created { get; set; }
         [Display(Name = "Currnet Amount")]
         public decimal CurrnetAmount { get; set; }
@@ -48,8 +52,13 @@ namespace RogueFinancialPortal.Models
             Items = new HashSet<BudgetItem>();
             Created = DateTime.Now;
             OwnerId = HttpContext.Current.User.Identity.GetUserId();
+            HouseHoldId = (int)HttpContext.Current.User.Identity.GetHouseHoldId();
+
         }
-       
+        public Budget(bool inSeed)
+        {
+
+        }
         #endregion
     }
 }

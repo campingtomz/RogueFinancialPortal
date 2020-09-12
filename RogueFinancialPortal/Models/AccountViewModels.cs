@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Web;
 
@@ -81,12 +82,25 @@ namespace RogueFinancialPortal.Models
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
     }
-    public class ExtendedRegisterViewModel: RegisterViewModel
+    public class ExtendedRegisterViewModel : RegisterViewModel
     {
+        [Required]
+        [Display(Name = "First Name")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "First Name Must be between 2 and 50 characters")]
         public string FirstName { get; set; }
+        [Required]
+        [Display(Name = "Last Name")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "Last Name Must be between 2 and 50 characters")]
         public string LastName { get; set; }
         public string PhoneNumber { get; set; }
         public HttpPostedFileBase Avatar { get; set; }
+    }
+    public class AcceptInvitationViewModel: ExtendedRegisterViewModel
+    {
+        //PK of the invitation
+        public int InvitationId { get; set; }
+        public Guid Code { get; set; }
+        public int HouseholdId { get; set; }
     }
     public class ResetPasswordViewModel
     {

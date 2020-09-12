@@ -183,6 +183,7 @@
     <Compile Include="Controllers\BudgetItemsController.cs" />
     <Compile Include="Controllers\BudgetsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HomeTableChartController.cs" />
     <Compile Include="Controllers\HouseHoldsController.cs" />
     <Compile Include="Controllers\InvitationsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -190,20 +191,27 @@
     <Compile Include="Controllers\TransactionAttachmentsController.cs" />
     <Compile Include="Controllers\TransactionsController.cs" />
     <Compile Include="Enums\AccountType.cs" />
+    <Compile Include="Enums\ApplicationSettings.cs" />
+    <Compile Include="Extensions\InvitationExtensions.cs" />
     <Compile Include="Enums\TransactionType.cs" />
     <Compile Include="Extensions\AuthorizeExtensions.cs" />
     <Compile Include="Extensions\IdentityExtensions.cs" />
+    <Compile Include="Extensions\TransactionsExtentions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\BankAccountHelper.cs" />
     <Compile Include="Helpers\BudgetHelper.cs" />
+    <Compile Include="Helpers\BudgetItemsHelper.cs" />
     <Compile Include="Helpers\FileStamp.cs" />
     <Compile Include="Helpers\FileUploadVaildator.cs" />
     <Compile Include="Helpers\HistoryHelper.cs" />
+    <Compile Include="Helpers\HomeTableChartHelper.cs" />
     <Compile Include="Helpers\HouseHoldHelper.cs" />
     <Compile Include="Helpers\ImageUploadValidator.cs" />
+    <Compile Include="Helpers\InvitationHelper.cs" />
     <Compile Include="Helpers\NotificationHelper.cs" />
+    <Compile Include="Helpers\SeedHelper.cs" />
     <Compile Include="Helpers\Slugger.cs" />
     <Compile Include="Helpers\StringHelper.cs" />
     <Compile Include="Helpers\TransactionHelper.cs" />
@@ -226,7 +234,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\BankAccountWizardVM.cs" />
+    <Compile Include="ViewModels\BudgetItemsVM.cs" />
     <Compile Include="ViewModels\BudgetWizardVM.cs" />
+    <Compile Include="ViewModels\HomeBankAccountVM.cs" />
+    <Compile Include="ViewModels\HomeBudgetItemsVM.cs" />
+    <Compile Include="ViewModels\HomeBudgetVm.cs" />
+    <Compile Include="ViewModels\HomeHouseHoldVM.cs" />
+    <Compile Include="ViewModels\HomeMemberVM.cs" />
+    <Compile Include="ViewModels\HomeTransactionsVM.cs" />
     <Compile Include="ViewModels\HouseHoldCreationWizardVM.cs" />
     <Compile Include="ViewModels\ManageUserVm.cs" />
     <Compile Include="Views\Account\delete some bs.cs" />
@@ -570,6 +585,7 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\Chart.min.js" />
     <Content Include="Scripts\chat.js" />
     <Content Include="Scripts\custom.min.js" />
     <Content Include="Scripts\CustomForm-Addon.js" />
@@ -797,6 +813,7 @@
     <Content Include="Scripts\jquery-3.5.1.slim.js" />
     <Content Include="Scripts\jquery-3.5.1.slim.min.js" />
     <Content Include="Scripts\jquery.dataTables.min.js" />
+    <Content Include="Scripts\jquery.slimscroll.js" />
     <Content Include="Scripts\jquery.steps.min.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\popper-utils.js" />
@@ -1001,6 +1018,7 @@
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
+    <Content Include="Scripts\validation.js" />
     <Content Include="Scripts\waves.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -1053,9 +1071,6 @@
     <Content Include="Views\BudgetItems\Index.cshtml" />
     <Content Include="Views\Invitations\Create.cshtml" />
     <Content Include="Views\Invitations\Delete.cshtml" />
-    <Content Include="Views\Invitations\Details.cshtml" />
-    <Content Include="Views\Invitations\Edit.cshtml" />
-    <Content Include="Views\Invitations\Index.cshtml" />
     <Content Include="Views\HouseHolds\Create.cshtml" />
     <Content Include="Views\HouseHolds\Delete.cshtml" />
     <Content Include="Views\HouseHolds\Details.cshtml" />
@@ -1088,11 +1103,15 @@
     <Content Include="Views\Manage\ManageUser.cshtml" />
     <Content Include="Views\Manage\UserProfile.cshtml" />
     <Content Include="Views\HouseHolds\HouseHoldWizard.cshtml" />
+    <Content Include="Views\Account\AcceptInvitaiton.cshtml" />
+    <Content Include="Views\Account\InvitationError.cshtml" />
+    <Content Include="Views\HouseHolds\LeaveAsync.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\Icons\" />
     <Folder Include="Uploads\" />
+    <Folder Include="Views\HomeTableChart\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

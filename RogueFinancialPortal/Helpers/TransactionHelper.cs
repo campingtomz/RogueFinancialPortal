@@ -12,6 +12,7 @@ namespace RogueFinancialPortal.Helpers
         private ApplicationDbContext db = new ApplicationDbContext();
         private UserRoleHelper userRoleHelper = new UserRoleHelper();
 
+   
         public List<Transaction> GetUserTransactions(string userId)
         {
             return db.Transactions.Where(t=>t.OwnerId == userId).ToList();

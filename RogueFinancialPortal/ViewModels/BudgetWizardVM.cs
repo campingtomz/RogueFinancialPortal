@@ -1,11 +1,16 @@
 ﻿using RogueFinancialPortal.Models;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace RogueFinancialPortal.ViewModels
 {
     public class BudgetWizardVM
     {
-        public Budget Budget { get; set; }
-        public ICollection<BudgetItem> BudgetItems { get; set; }
+        public string BudgetName { get; set; }     
+        public string Description { get; set; }
+        public int BankAccontId { get; set; }
+   
+        public List<BudgetItemsVM> BudgetItems { get; set; }
+
     }
 }

@@ -22,7 +22,6 @@ namespace RogueFinancialPortal.Models
         public virtual BankAccount BanckAccount { get; set; }
         public int? BudgetItemId { get; set; }
         public virtual BudgetItem BudgetItem { get; set; }
-        public virtual ICollection<TransactionAttachment> Attachments { get; set; }
 
         public TransactionType TransactionType { get; set; }
         #endregion
@@ -30,21 +29,28 @@ namespace RogueFinancialPortal.Models
         public DateTime Created { get; set; }
         public decimal Amount { get; set; }
         public string Memo { get; set; }
+        public string FilePath { get; set; }
 
         [Display(Name = "Delete Transaction")]
         public bool IsDeleted { get; set; }
-        public AccountType AccountType { get; set; }
         #endregion
         #region virtual
         #endregion
         #region Constructor
-        public Transaction(decimal startingBalance, decimal warningBalance)
+        public Transaction(decimal amount, string memo)
         {
-           
+            Amount = amount;
+            Memo = memo;
             Created = DateTime.Now;
             OwnerId = HttpContext.Current.User.Identity.GetUserId();
         }
-      
+        public Transaction()
+        {
+
+            Created = DateTime.Now;
+            OwnerId = HttpContext.Current.User.Identity.GetUserId();
+        }
+
         #endregion
     }
 }

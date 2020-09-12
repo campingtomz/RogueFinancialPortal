@@ -4,44 +4,34 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.Ajax.Utilities;
+using RogueFinancialPortal.Enums;
+using RogueFinancialPortal.Extensions;
 using RogueFinancialPortal.Models;
 
 namespace RogueFinancialPortal.Controllers
 {
+    [Authorize]
     public class InvitationsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Invitations
-        public ActionResult Index()
-        {
-            var invitations = db.Invitations.Include(i => i.HouseHold).Include(i => i.Owner);
-            return View(invitations.ToList());
-        }
-
-        // GET: Invitations/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Invitation invitation = db.Invitations.Find(id);
-            if (invitation == null)
-            {
-                return HttpNotFound();
-            }
-            return View(invitation);
-        }
-
+       
         // GET: Invitations/Create
+        //[Authorize(Roles = "Head")]
         public ActionResult Create()
         {
-            ViewBag.HouseHoldId = new SelectList(db.HouseHolds, "Id", "OwnerId");
-            ViewBag.OwnerId = new SelectList(db.Users, "Id", "FirstName");
-            return View();
+            var hhId = User.Identity.GetHouseHoldId();
+            if(hhId == 0)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            var invitation = new Invitation((int)hhId);
+            return View(invitation);
         }
 
         // POST: Invitations/Create
@@ -49,55 +39,24 @@ namespace RogueFinancialPortal.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,HouseHoldId,OwnerId,Body,Subject,Greeting,IsValid,Created,TTL,RecipientEmail,Code")] Invitation invitation)
+        public async Task<ActionResult> Create( Invitation invitation)
         {
             if (ModelState.IsValid)
             {
+                invitation.Code = Guid.NewGuid();
                 db.Invitations.Add(invitation);
                 db.SaveChanges();
-                return RedirectToAction("Index");
-            }
+                await invitation.SendInvitation();
 
-            ViewBag.HouseHoldId = new SelectList(db.HouseHolds, "Id", "OwnerId", invitation.HouseHoldId);
-            ViewBag.OwnerId = new SelectList(db.Users, "Id", "FirstName", invitation.OwnerId);
+                return RedirectToAction("Index","Home");
+            }
+           
+
             return View(invitation);
         }
 
         // GET: Invitations/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Invitation invitation = db.Invitations.Find(id);
-            if (invitation == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.HouseHoldId = new SelectList(db.HouseHolds, "Id", "OwnerId", invitation.HouseHoldId);
-            ViewBag.OwnerId = new SelectList(db.Users, "Id", "FirstName", invitation.OwnerId);
-            return View(invitation);
-        }
-
-        // POST: Invitations/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,HouseHoldId,OwnerId,Body,Subject,Greeting,IsValid,Created,TTL,RecipientEmail,Code")] Invitation invitation)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(invitation).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            ViewBag.HouseHoldId = new SelectList(db.HouseHolds, "Id", "OwnerId", invitation.HouseHoldId);
-            ViewBag.OwnerId = new SelectList(db.Users, "Id", "FirstName", invitation.OwnerId);
-            return View(invitation);
-        }
-
+       
         // GET: Invitations/Delete/5
         public ActionResult Delete(int? id)
         {

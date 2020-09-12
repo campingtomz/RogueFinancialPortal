@@ -45,7 +45,28 @@ namespace RogueFinancialPortal.Models
             Created = DateTime.Now;
             OwnerId = HttpContext.Current.User.Identity.GetUserId();
         }
+        public HouseHold(string houseHoldName, string greeting)
+        {
+            Budgets = new HashSet<Budget>();
+            BankAccounts = new HashSet<BankAccount>();
+            Members = new HashSet<ApplicationUser>();
+            Invitations = new HashSet<Invitation>();
+            Notifications = new HashSet<Notification>();
+            HouseHoldName = houseHoldName;
+            Greeting = greeting;
+            Created = DateTime.Now;
+            OwnerId = HttpContext.Current.User.Identity.GetUserId();
+        }
+        public HouseHold(bool inSeed)
+        {
+            Budgets = new HashSet<Budget>();
+            BankAccounts = new HashSet<BankAccount>();
+            Members = new HashSet<ApplicationUser>();
+            Invitations = new HashSet<Invitation>();
+            Notifications = new HashSet<Notification>();
 
+            Created = DateTime.Now;
+        }
         #endregion
     }
 }

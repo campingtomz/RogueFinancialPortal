@@ -2,39 +2,24 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Mvc;
+using RogueFinancialPortal.Extensions;
+using RogueFinancialPortal.Helpers;
 using RogueFinancialPortal.Models;
 
 namespace RogueFinancialPortal.Controllers
 {
+    [Authorize]
     public class TransactionsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Transactions
-        public ActionResult Index()
-        {
-            var transactions = db.Transactions.Include(t => t.BudgetItem).Include(t => t.Owner);
-            return View(transactions.ToList());
-        }
-
-        // GET: Transactions/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Transaction transaction = db.Transactions.Find(id);
-            if (transaction == null)
-            {
-                return HttpNotFound();
-            }
-            return View(transaction);
-        }
 
         // GET: Transactions/Create
         public ActionResult Create()
@@ -49,12 +34,14 @@ namespace RogueFinancialPortal.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,OwnerId,AccountId,BudgetItemId,TransactionType,Created,Amount,Memo,IsDeleted,AccountType")] Transaction transaction)
+        public ActionResult Create([Bind(Include = "Id,OwnerId,AccountId,BudgetItemId,TransactionType,Created,Amount,Memo,IsDeleted,AccountType,AvatarPath")] Transaction transaction, HttpPostedFileBase file)
         {
             if (ModelState.IsValid)
             {
+                AddAttachment(transaction,file);
                 db.Transactions.Add(transaction);
                 db.SaveChanges();
+                transaction.UpdateBalance();
                 return RedirectToAction("Index");
             }
 
@@ -75,8 +62,7 @@ namespace RogueFinancialPortal.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.BudgetItemId = new SelectList(db.BudgetItems, "Id", "OwnerId", transaction.BudgetItemId);
-            ViewBag.OwnerId = new SelectList(db.Users, "Id", "FirstName", transaction.OwnerId);
+
             return View(transaction);
         }
 
@@ -85,19 +71,37 @@ namespace RogueFinancialPortal.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,OwnerId,AccountId,BudgetItemId,TransactionType,Created,Amount,Memo,IsDeleted,AccountType")] Transaction transaction)
+        public ActionResult Edit([Bind(Include = "Id,OwnerId,AccountId,BudgetItemId,TransactionType,Created,Amount,Memo,IsDeleted,AccountType,AvatarPath")] Transaction transaction, HttpPostedFileBase file)
         {
             if (ModelState.IsValid)
             {
+                var oldTransaction = db.Transactions.AsNoTracking().FirstOrDefault(t => t.Id == transaction.Id);
+                if(file != null)
+                {
+                    AddAttachment(transaction, file);
+                }
                 db.Entry(transaction).State = EntityState.Modified;
+
                 db.SaveChanges();
+                var newTransaction = db.Transactions.AsNoTracking().FirstOrDefault(t => t.Id == transaction.Id);
+                newTransaction.EditTransaction(oldTransaction);
+
                 return RedirectToAction("Index");
             }
-            ViewBag.BudgetItemId = new SelectList(db.BudgetItems, "Id", "OwnerId", transaction.BudgetItemId);
-            ViewBag.OwnerId = new SelectList(db.Users, "Id", "FirstName", transaction.OwnerId);
+
             return View(transaction);
         }
-
+        public  void AddAttachment( Transaction transaction, HttpPostedFileBase file)
+        {
+            if (FileUploadValidator.IsWebFriendlyImage(file) || FileUploadValidator.IsWebFriendlyFile(file))
+            {
+                var fileName = FileStamp.MakeUnique(file.FileName);
+                var serverFolder = WebConfigurationManager.AppSettings["DefaultAttachmentFolder"];
+                file.SaveAs(Path.Combine(Server.MapPath(serverFolder), fileName));
+                transaction.FilePath = $"{serverFolder}{fileName}";
+                db.SaveChanges();
+            }
+        }
         // GET: Transactions/Delete/5
         public ActionResult Delete(int? id)
         {
@@ -119,6 +123,7 @@ namespace RogueFinancialPortal.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Transaction transaction = db.Transactions.Find(id);
+            transaction.DeleteTransaction();
             db.Transactions.Remove(transaction);
             db.SaveChanges();
             return RedirectToAction("Index");

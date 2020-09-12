@@ -14,6 +14,7 @@ using RogueFinancialPortal.Models;
 
 namespace RogueFinancialPortal.Controllers
 {
+    [Authorize]
     public class TransactionAttachmentsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
