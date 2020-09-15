@@ -4,7 +4,8 @@
 @using RogueFinancialPortal.Helpers;
 
 @{ var userHelper = new UserHelper(); }
-@{ var userRoleHelper = new UserRoleHelper(); }
+@{ var userRoleHelper = new UserRoleHelper();
+    var notificationHelper = new NotificationHelper();}
 
 @{ var user = userHelper.getUser(User.Identity.GetUserId());
 
@@ -27,12 +28,7 @@
                         <img src="@user.AvatarPath" class="img-circle" width="150" />
                         <h4 class="card-title m-t-10">@user.FullName</h4>
                         <h6 class="card-subtitle">@userRoleHelper.ListUserRoles(user.Id).FirstOrDefault()</h6>
-                        <div class="row text-center justify-content-md-center">
-                            <h4><a href="@Url.Action("Index", "Projects", new { userid = user.Id })"><i class="mdi mdi-book-open-page-variant">  Projects</i></a></h4>
-                        </div>
-                        <div class="row text-center justify-content-md-center">
-                            <h4><a href="@Url.Action("Index", "Tickets", new { userid = user.Id })"><i class="mdi mdi-book-open-page-variant">  Tickets</i></a></h4>
-                        </div>
+                       
                     </center>
                 </div>
                 <div>
@@ -92,14 +88,17 @@
 
                     <div class="tab-pane " id="Notifications" role="tabpanel">
                         <div class="card-body">
-                            <div class="row">
-                                <h4 class="card-title">Ticket Notifications</h4>
-                                <div class="comment-widgets m-b-20">
-                                    <div class="chat-box b-all">
-                                        <ul class="notificationList chat-list">
-                                        </ul>
+                            <div class="row ">
+                                <h4 class="card-title"> Notifications</h4>
+                                
+                                    <div class="chat-box">
+                                        <ul class="chat-list">
+                                            
+                                            
+                                            </ul>
                                     </div>
-                                </div>
+                              
+                               
                             </div>
                         </div>
                     </div>
@@ -124,14 +123,15 @@
                                     @Html.ActionLink("Change Password", "ManageUser", "Manage", new { userId = user.Id }, new { @class = "p-l-20" })
                                 </div>
                             </div>
+                            @if (userRoleHelper.ListUserRoles(user.Id).FirstOrDefault() != "Default") {
                             <hr />
                             <div class="row p-l-20">
                                 <div class="col-6">
                                     <h4 class="card-title">Leave HouseHold</h4>
-                                    <h6 class="card-subtitle p-l-20">Change Password</h6>
-                                    @Html.ActionLink("Leave Household", "LeaveAsync", "Households",new { @class = "p-l-20" })
+                                    @Html.ActionLink("Leave Household", "LeaveAsync", "Households", new { @class = "p-l-20" })
                                 </div>
                             </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -161,11 +161,11 @@
                             @Html.DropDownList("Members", null, new { @class = "form-control" })
                         </div>
                     </div>
-                        
+
                     }
-                 
+
                 </div>
-                    
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-danger waves-effect waves-light">leave</button>
@@ -177,65 +177,74 @@
 @section scripts{
     <script>
         $(document).ready(function () {
-                                            //getUserNotifications();
-                                        });
+            loadNotifcations();
 
-        @*$('.notificaionClose').on("click", function (e) {
-             var url = '@Url.Action("setNotificationIsRead", "HomeTableChart")'
-            var notification = $(".notificaionClose").val();
+            $(document).on('click', '.deleteNotification', function () {
+                var url = '@Url.Action("DeleteNotification", "Manage")'
+                var notifcationId = $(this).val();
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: JSON.stringify({ 'notifcationId': notifcationId }),
+                    dataType: 'json',
+                    contentType: "application/json; charset=utf-8",
+                    success: function (response) {
+                        loadNotifcations();
+                    },
+                    error: function (response) {
+                        alert("Error while inserting data");
+                    }
 
-            $.ajax({
-                type: "POST",
-                async: false,
-                url: url,
-                data: JSON.stringify({ "notificationId": notification }),
-                dataType: 'json',
-                contentType: "application/json; charset=utf-8",
-                success: function (response) {
-                    getTicketComments(ticketId)
-                },
-                error: function () {
-                    alert("Error while inserting data");
-                }
+                });
+
             });
 
 
-        })
+            function loadNotifcations() {
+             var url = '@Url.Action("GetNotification", "Manage")'
 
-         function getUserNotifications() {
-             var url = '@Url.Action("GetUserNotifications", "Manage")'
             $.ajax({
                 type: "POST",
                 url: url,
-                //data: JSON.stringify({ 'ticketId': ticketId }),
+                
                 dataType: 'json',
                 contentType: "application/json; charset=utf-8",
                 success: function (response) {
-                    $(".notificationList").empty();
+                    $('.chat-list').empty()
+                    console.log(response)
+                    if (response != null || response.length > 0) { 
+                        response.forEach(function (notification) {
+                            var milli = `${notification.Created}`.replace(/\/Date\((-?\d+)\)\//, '$1');                     
+                            var d = new Date(parseInt(milli));                           
+                            var date = ((d.getMonth() > 8) ? (d.getMonth() + 1) : ('0' + (d.getMonth() + 1))) + '/' + ((d.getDate() > 9) ? d.getDate() : ('0' + d.getDate())) + '/' + d.getFullYear();                         
+                        $('.chat-list').append(`<li>
+                                                <div class="d-flex flex-row comment-row">
+                                                    <div class="comment-text w-100">
 
-                    if (typeof response != "undefined" && response != null && response.length != null && response.length > 0) {
-                        response.forEach(function (response) {
-                            $(".notificationList").append(
-                                `<div class="alert alert-${response.Type}">
-                                         <h6>${response.Created}</h6>
-                                            <button type="button" value="${response.Id},${response.notificationVersion}" class="close notificaionClose" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
-                                            <h3 class="text-${response.Type}"><i class="fa ${response.Icon}"></i> ${response.Subject}</h3> ${response.Message}
-                                        </div>`
-                            )
-                        })
+                                                        <h5>${notification.Subject} <button value="${notification.Id}" class="btn  btn-circle  float-right  deleteNotification"><span><i class="fa fa-times"></i></span></button></h5>
+                                                        <div class="comment-footer">
+                                                            <span class="time">${date}</span>
 
-
-                    } else {
-                        $(".chat-list").append(` <h4 class= "card-title"> No Comments on The Ticket</h4>`)
-                    }
-                    $(".NotificationDisplay").show();
+                                                        </div>
+                                                        <p class="m-b-5 m-t-10">${notification.Message}</p>
+                                                    </div>
+                                                </div>
+                                                <hr />
+                                            </li>`);
+                    });
+                }
+                else{
+                        $('.chat-list').append(`<li><h5 class="p-l-20">No New Notifications</h5></li>`);
+                }
                 },
                 error: function (response) {
                     alert("Error while inserting data");
                 }
 
             });
-        }*@
+
+            };
+        });
     </script>
 
 

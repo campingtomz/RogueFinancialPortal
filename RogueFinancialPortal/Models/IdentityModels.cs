@@ -16,11 +16,11 @@ namespace RogueFinancialPortal.Models
         private ApplicationDbContext db = new ApplicationDbContext();
 
         public virtual ICollection<Budget> Budgets { get; set; }
-
+        public virtual ICollection<History> Histories { get; set; }
         public virtual ICollection<Notification> Notifications { get; set; }
         public virtual ICollection<Transaction> Transactions { get; set; }
         public virtual ICollection<BankAccount> BankAccounts { get; set; }
-
+       
         #endregion
         #region Actuall Properties
         [Required]
@@ -69,6 +69,8 @@ namespace RogueFinancialPortal.Models
         {
             Budgets = new HashSet<Budget>();
             Notifications = new HashSet<Notification>();
+            Histories = new HashSet<History>();
+
             Transactions = new HashSet<Transaction>();
             BankAccounts = new HashSet<BankAccount>();
             AvatarPath = "/Avatar/default.png";
@@ -106,11 +108,12 @@ namespace RogueFinancialPortal.Models
         public DbSet<BudgetItem> BudgetItems { get; set; }
         public DbSet<Budget> Budgets { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<History> Histories { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Invitation> Invitations { get; set; }
         public DbSet<BankAccount> BankAccounts { get; set; }
         public DbSet<HouseHold> HouseHolds { get; set; }
-        public DbSet<TransactionAttachment> TransactionAttachments { get; set; }
-        
+       
+
     }
 }

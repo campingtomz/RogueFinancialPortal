@@ -27,13 +27,14 @@
     </div>
     <div class="col-lg-4 col-md-6 Acounts ">
         <div class="card h-100">
-            <div class="card-body AccountsInfo">
+            <div class="card-body ">
+                <div class="accordion AccountsInfo message-center" id="AccountsInfo">
 
 
-
+                </div>
             </div>
-            <button id="btn-submit" class="btn btn-info" alt="default" data-toggle="modal" data-target="#addAccounts-modal"> <i class="fa fa-user-circle-o"></i> Add Bank Account</button>
 
+            <button id="btn-submit" class="btn btn-info addBankAccount" alt="default" > <i class="fa  fa-bank"></i> Add Bank Account</button>
         </div>
     </div>
 
@@ -46,7 +47,7 @@
                 <div class="memberInfo message-center">
 
                 </div>
-                
+
 
 
             </div>
@@ -63,7 +64,15 @@
 
                 </div>
             </div>
-            <button id="btn-submit" class="btn btn-info" alt="default" data-toggle="modal" data-target="#addBudget-modal"> <i class="fa fa-money"></i> Add Budget</button>
+            <div class=" row">
+                <div class="col-6">
+                    <button id="btn-submit" class="btn btn-info addBuget" alt="default"> <i class="fa fa-money"></i> Add Budget</button>
+                </div>
+                <div class="col-6">
+                    <button id="btn-submit" class="btn btn-info addBugetItem" alt="default"> <i class="fa fa-money"></i> Add Budget Item</button>
+
+                </div>
+            </div>
 
         </div>
     </div>
@@ -71,7 +80,6 @@
     <div class="col-lg-4 col-md-6 BudgetsGraphs ">
         <div class="card h-100">
             <div class="card-body">
-                <h4 class="card-title"> Budgets</h4>
                 <div id="budgetCarousel" class="carousel slide budgetCarousel" data-ride="carousel">
                     <!-- Indicators -->
                     <!-- Wrapper for slides -->
@@ -89,7 +97,7 @@
                         <span class="sr-only">Next</span>
                     </a>
                 </div>
-                <ol class="carousel-indicators budgetCarousel-indicators" >
+                <ol class="carousel-indicators budgetCarousel-indicators">
                 </ol>
             </div>
         </div>
@@ -110,6 +118,7 @@
                                 <th>Budget Item</th>
                                 <th>Type</th>
                                 <th>Amount</th>
+                                <th>Memo</th>
                                 <th>Action</th>
 
                             </tr>
@@ -119,41 +128,43 @@
 
                 </div>
 
-                <button id="btn-submit" class="btn btn-info" alt="default" data-toggle="modal" data-target="#addTransaction-modal"> <i class="fa fa-pencil"></i> Add Transaction</button>
+                <button id="btn-submit" class="btn btn-info addTransaction" alt="default"> <i class="fa fa-pencil"></i> Add Transaction</button>
             </div>
         </div>
     </div>
-    <div class="col-lg-4 col-md-6 BudgetsItemsGraphs ">
-        <div class="card h-100">
-            <div class="card-body">
-                <h4 class="card-title"> Budget Items</h4>
-                <div id="budgetItemCarousel" class="carousel slide budgetItemCarousel" data-ride="carousel">
-                    <!-- Indicators -->
-                    <!-- Wrapper for slides -->
-                    <div class="carousel-inner  budgetItemCarousel-inner" role="listbox">
+    @*<div class="col-lg-4 col-md-6 BudgetsItemsGraphs ">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h4 class="card-title"> Budget Items</h4>
+                    <div id="budgetItemCarousel" class="carousel slide budgetItemCarousel" data-ride="carousel">
+                         Indicators
+                         Wrapper for slides
+                        <div class="carousel-inner  budgetItemCarousel-inner" role="listbox">
 
+                        </div>
+
+                         Left and right controls
+                        <a class="left carousel-control" href="#budgetItemCarousel" data-slide="prev">
+                            <span class="fa  fa-chevron-left"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="right carousel-control" href="#budgetItemCarousel" data-slide="next">
+                            <span class="fa  fa-chevron-right"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
                     </div>
-
-                    <!-- Left and right controls -->
-                    <a class="left carousel-control" href="#budgetItemCarousel" data-slide="prev">
-                        <span class="fa  fa-chevron-left"></span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="right carousel-control" href="#budgetItemCarousel" data-slide="next">
-                        <span class="fa  fa-chevron-right"></span>
-                        <span class="sr-only">Next</span>
-                    </a>
+                    <ol class="carousel-indicators budgetItemCarousel-indicators">
+                    </ol>
                 </div>
-                <ol class="carousel-indicators budgetItemCarousel-indicators">
-                </ol>
             </div>
-        </div>
-    </div>
+        </div>*@
 </div>
 
 @*graphs*@
 <div class="row m-l-20">
 </div>
+
+
 <div id="addTransaction-modal" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -163,7 +174,7 @@
 
             </div>
             <div class="modal-body">
-
+                <div id="tranactionId" value=""></div>
                 <div class="form-group">
                     <label for="recipient-name" class="control-label">Budget Itmes:</label>
                     @Html.DropDownList("BudgetsItemsList", null, new { @class = "form-control" })
@@ -190,21 +201,25 @@
 
             </div>
             <div class="modal-footer">
+
                 <button type="button" class="btn transactionCancel btn-default waves-effect waves-light" data-dismiss="modal">Close</button>
-                <button type="button" id="transactionSubmit" class="transactionSubmit btn btn-danger waves-effect waves-light">Submit</button>
+                <button type="button" id="transactionSubmit" class=" btn btn-danger waves-effect waves-light">Submit</button>
             </div>
         </div>
     </div>
 </div>
-<div id="addAccounts-modal" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+
+<div id="addBankAccount-modal" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">Add Account</h4>
                 <button type="button" class="close accountAddCancel" data-dismiss="modal" aria-hidden="true">×</button>
-                
+
             </div>
             <div class="modal-body">
+                <div id="bankAccountId" value=""></div>
+
                 <div class="form-group">
                     <label for="message-text" class="control-label ">Account Name:</label>
                     <input class="form-control BankAccountName accountInput input" id="BankAccountName" />
@@ -221,14 +236,14 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="message-text" class="control-label ">Starting Balance :</label>
+                    <label for="message-text" class="control-label ">Warning Balance :</label>
                     <input class="form-control WarningBalance accountInput input" id="WarningBalance" />
                 </div>
 
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn accountAddCancel btn-default waves-effect waves-light" data-dismiss="modal">Close</button>
-                <button type="button" id="accountSubmit" class="accountSubmit btn btn-danger waves-effect waves-light">Submit</button>
+                <button type="button" id="bankAccountSubmit" class=" btn btn-danger waves-effect waves-light">Submit</button>
             </div>
         </div>
     </div>
@@ -239,9 +254,11 @@
             <div class="modal-header">
                 <h4 class="modal-title">Add budget</h4>
                 <button type="button" class="close addBudgetCancel" data-dismiss="modal" aria-hidden="true">×</button>
-                
+
             </div>
             <div class="modal-body">
+                <div id="budgetId" value=""></div>
+
                 <div class="form-group">
                     <label for="message-text" class="control-label">Budget Name :</label>
                     <input class="form-control BudgetName budgetInput input" id="BudgetName" />
@@ -252,17 +269,17 @@
                     @Html.DropDownList("AccountList", null, htmlAttributes: new { @class = "form-control" })
 
                 </div>
-                
+
 
                 <div class="form-group">
                     <label for="message-text" class="control-label ">Description :</label>
-                    <textarea class="form-control budgetDescription budgetInput input" id="budgetDescription"></textarea> 
+                    <textarea class="form-control budgetDescription budgetInput input" id="budgetDescription"></textarea>
                 </div>
 
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn addBudgetCancel btn-default waves-effect waves-light" data-dismiss="modal">Close</button>
-                <button type="button" id="budgetSubmit" class="budgetSubmit btn btn-danger waves-effect waves-light">Submit</button>
+                <button type="button" id="budgetSubmit" class=" btn btn-danger waves-effect waves-light">Submit</button>
             </div>
         </div>
     </div>
@@ -276,6 +293,8 @@
 
             </div>
             <div class="modal-body">
+                <div id="budgetItemId" value=""></div>
+
                 <div class="form-group">
                     <label for="message-text" class="control-label">Item Name :</label>
                     <input class="form-control BudgetItemName budgetItemInput input" id="BudgetItemName" />
@@ -283,12 +302,12 @@
 
                 <div class="form-group">
                     <label for="recipient-name" class="control-label">Account :</label>
-                    @Html.DropDownList("AccountList", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.DropDownList("BudgetsList", null, htmlAttributes: new { @class = "form-control" })
 
                 </div>
                 <div class="form-group">
                     <label for="message-text" class="control-label ">Target Amount :</label>
-                    <textarea class="form-control budgetItemTargetAmount budgetItemInput input" id="budgetItemTargetAmount"></textarea>
+                    <input class="form-control budgetItemTargetAmount budgetItemInput input" id="budgetItemTargetAmount"/>
                 </div>
 
                 <div class="form-group">
@@ -299,12 +318,12 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn addBudgetItemCancel btn-default waves-effect waves-light" data-dismiss="modal">Close</button>
-                <button type="button" id="budgetItemSubmit" class="budgetItemSubmit btn btn-danger waves-effect waves-light">Submit</button>
+                <button type="button" id="budgetItemSubmit" class=" btn btn-danger waves-effect waves-light">Submit</button>
             </div>
         </div>
     </div>
 </div>
-<div id="invite-modal" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+<div id="inviteMember-modal" class="modal fade " tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -326,15 +345,17 @@
         </div>
     </div>
 </div>
+
 @section scripts{
     <script>
+
         $(document).ready(function () {
             loadHouseHold();
             //load household info
             //load bankaccount
             //load budgets
             //load budgetItems
-            $('.TransactionsTable').DataTable({
+              $('.TransactionsTable').DataTable({
 
                 dom: 'Bfrtip',
                 buttons: [
@@ -343,205 +364,94 @@
             });
         });
 
-        $('.transactionCancel').on('click', function () {
-            $('.AmountText').val('');
-            $('.memoText').val('');
-        });
-        $('.transactionSubmit').on('click', function () {
-            if (checkValid('.transactionInput') && checkIfNumeric(".AmountText"))  {
-
-                var newTransaction = {
-                    Amount: $('.AmountText').val(),
-                    Memo: $('.memoText').val(),
-                    TransactionType: $('#TransactionType option:selected').val(),
-                    BudgetItemId: $('#BudgetsItemsList option:selected').val(),
-                    TransactionFile: $('.TransactionFile'),
-                }
-                var url = '@Url.Action("AddTransaction", "HomeTableChart")'
-                $('#addTransaction-modal').modal('toggle');
-                $('.AmountText').val('');
-                $('.memoText').val('');
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    data: JSON.stringify({ 'newTransaction': newTransaction}),
-                    dataType: 'json',
-                    contentType: "application/json; charset=utf-8",
-                    success: function (response) {
-                        loadHouseHold();
-                    },
-                    error: function (response) {
-                        alert("Error while inserting data");
-                    }
-
-                });
-            }
-        });
-        $('.TransactionsTable').on('click', '.editTransaction', function () {
-            var url = '@Url.Action("editTransaction", "HomeTableChart")'
-            var transactionId = $(this).val();
-                        $.ajax({
-                            type: "POST",
-                            url: url,
-                            data: JSON.stringify({ 'transactionId': transactionId }),
-                            dataType: 'json',
-                            contentType: "application/json; charset=utf-8",
-                            success: function (response) {
-                                console.log(response);
-                                loadTransactions(response);
-                            },
-                            error: function (response) {
-                                console.log(response);
-                                alert("Error while inserting data");
-                            }
-                        });
-        });
-
-        $('.TransactionsTable').on('click','.deleteTransaction', function () {
-            var url = '@Url.Action("deleteTransaction", "HomeTableChart")'
-            var transactionId = $(this).val();
-                        $.ajax({
-                            type: "POST",
-                            url: url,
-                            data: JSON.stringify({ 'transactionId': transactionId }),
-                            dataType: 'json',
-                            contentType: "application/json; charset=utf-8",
-                            success: function (response) {
-                                loadHouseHold();
-                            },
-                            error: function (response) {
-                                console.log(response);
-                                alert("Error while inserting data");
-                            }
-                        });
-        });
         $(".input").change(function () {
             var parent = $(this).closest('div');
             parent.removeClass("error");
             parent.find(".validationError").remove();
         });
 
-        $('.accountAddCancel').on('click', function () {
+        $('.TransactionsTable').on('click','.deleteTransaction', function () {
+            deleteTransaction($(this).val());
+        });
+        $('.TransactionsTable').on('click', '.editTransaction', function () {
+            getTranasctionInfo($(this).val());
+            $('#transactionSubmit').addClass("transactionEditSubmit");
+            $('#addTransaction-modal').modal('toggle');
+        });
+        $('.addTransaction').on('click', function () {
+            $('#transactionSubmit').addClass("transactionAddSubmit");
+            $('#addTransaction-modal').modal('toggle');
+
+
+        });
+        $('.transactionCancel').on('click', function () {
+            $('.AmountText').attr("placeholder", '');
             $('.AmountText').val('');
+            $('.memoText').attr("placeholder", '');
             $('.memoText').val('');
+            $('#transactionSubmit').removeClass("transactionAddSubmit");
+            $('#transactionSubmit').removeClass("transactionEditSubmit");
+
         });
-        $('.accountSubmit').on('click', function () {
-            if (checkValid('.accountInput') && checkIfNumeric(".StartingBalance") && checkIfNumeric(".WarningBalance") )  {
-
-                var newAccount = {
-                    BankAccountName: $('.BankAccountName').val(),
-                    StartingBalance: $('.StartingBalance').val(),
-                    WarningBalance: $('.WarningBalance').val(),
-                    BudgetItemId: $('#AccountType option:selected').val(),
-
-                }
-                var url = '@Url.Action("AddAccount", "HomeTableChart")'
-                $('#addAccounts-modal').modal('toggle');
-                $('.accountInput').val('');
-                $('.StartingBalance').val('');
-                $('.WarningBalance').val('');
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    data: JSON.stringify({ 'newAccount': newAccount }),
-                    dataType: 'json',
-                    contentType: "application/json; charset=utf-8",
-                    success: function (response) {
-                        loadBankAccounts(response);
-                    },
-                    error: function (response) {
-                        alert("Error while inserting data");
-                    }
-
-                });
-            }
+        $(document).on('click', '.transactionAddSubmit',function () {
+            submitTransaction(true);
+        });
+        $(document).on('click', '.transactionEditSubmit', function () {
+            submitTransaction(false);
         });
 
-        $('.budgetAddCancel').on('click', function () {
-            $('.BudgetName').val('');
-            $('.budgetDescription').val('');
+
+        $(document).on('click', '.deleteBudgetItem', function () {
+            deleteBudgetItem($(this).val());
+
         });
-        $('.budgetSubmit').on('click', function () {
-            if (checkValid('.budgetInput') && checkIfNumeric(".budgetTargetAmount")  )  {
+        $(document).on('click', '.editBudgetItem', function () {
+            getBudgetItemInfo($(this).val());
+            $('#budgetItemSubmit').addClass("budgetItemEditSubmit");
+            $('#addBudgetItem-modal').modal('toggle');
 
-                var newbudget = {
-                    BudgetName: $('.BudgetName').val(),
-                    Description: $('.budgetDescription').val(),
-                    BankAccontId: $('#AccountList option:selected').val(),
-                }
-                var url = '@Url.Action("AddBudget", "HomeTableChart")'
-                $('#addBudget-modal').modal('toggle');
-                $('.BudgetName').val('');
-                $('.budgetDescription').val('');
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    data: JSON.stringify({ 'newbudget': newbudget }),
-                    dataType: 'json',
-                    contentType: "application/json; charset=utf-8",
-                    success: function (response) {
-                        console.log(response);
-                        loadBudgets(response);
-                    },
-                    error: function (response) {
-                        alert("Error while inserting data");
-                    }
-
-                });
-            }
         });
+        $('.addBugetItem').on('click', function () {
+            $('#budgetItemSubmit').addClass("budgetItemAddSubmit");
+            $('#addBudgetItem-modal').modal('toggle');
 
-        $('.addBudgetItemCancel').on('click', function () {
+
+        });
+        $('.budgetItemAddCancel').on('click', function () {
             $('.BudgetItemName').val('');
+            $('.BudgetItemName').attr("placeholder", '');
             $('.budgetItemDescription').val('');
+            $('.budgetItemDescription').attr("placeholder", '');
             $('.budgetItemTargetAmount').val('');
+            $('.budgetItemTargetAmount').attr("placeholder", '');
+            $('#budgetSubmit').removeClass("budgetAddSubmit");
+            $('#budgetSubmit').removeClass("budgetEditSubmit");
         });
-        $('.budgetItemSubmit').on('click', function () {
-            if (checkValid('.budgetItemInput') && checkIfNumeric(".budgetItemTargetAmount")  )  {
+        $(document).on('click', '.budgetItemAddSubmit', function () {
+            submitBudgetItem(true);
+        });
+        $(document).on('click', '.budgetItemEditSubmit', function () {
+            submitBudgetItem(false);
+        });
+        $(document).on('click', '.budgetItemBtn', function () {
+            LoadTransactionsByBudgetItem($(this).val());
 
-                var newBudgetItem = {
-                    ItemName: $('.BudgetItemName').val(),
-                    Description: $('.budgetItemDescription').val(),
-                    TargetAmount: $('.budgetItemTargetAmount').val(),
-                    BudgetId: $('#BudgetList option:selected').val(),
-                }
-                var url = '@Url.Action("AddBudgetItem", "HomeTableChart")'
-                $('#addBudget-modal').modal('toggle');
-                $('.BudgetItemName').val('');
-                $('.budgetItemDescription').val('');
-                $('.budgetItemTargetAmount').val('');
-
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    data: JSON.stringify({ 'newBudgetItem': newBudgetItem }),
-                    dataType: 'json',
-                    contentType: "application/json; charset=utf-8",
-                    success: function (response) {
-                        console.log(response);
-                        loadBudgetsItems(response);
-                    },
-                    error: function (response) {
-                        alert("Error while inserting data");
-                    }
-
-                });
-            }
         });
 
         $('.inviteCancel').on('click', function () {
             $('.inviteEmail').val('');
-           
+
         });
         $('.inviteSubmit').on('click', function () {
-            if (checkValid('.inviteEmail')   )  {              
+            if (checkValid('.inviteEmail')   )  {
                 var url = '@Url.Action("InviteMember", "HomeTableChart")'
-                $('#addBudget-modal').modal('toggle');
+                var inviteEmail = $('.inviteEmail').val();
+                $('#inviteMember-modal').modal('toggle');
                 $('.inviteEmail').val('');
                 $.ajax({
                     type: "POST",
                     url: url,
-                    data: JSON.stringify({ 'email': inviteEmail }),
+                    data: JSON.stringify({ 'inviteEmail': inviteEmail }),
                     dataType: 'json',
                     contentType: "application/json; charset=utf-8",
                     success: function (response) {
@@ -555,6 +465,86 @@
                 });
             }
         });
+        $(document).on('click', '.memberBtn', function () {
+            LoadTransactionsByMember($(this).val());
+
+        });
+
+        $(document).on('click', '.deleteBudget', function () {
+            deleteBudget($(this).val());
+
+        });
+        $(document).on('click', '.editBudget', function () {
+            getBudgetInfo($(this).val());
+            $('#budgetSubmit').addClass("budgetEditSubmit");
+            $('#addBudget-modal').modal('toggle');
+
+        });
+        $('.addBuget').on('click', function () {
+            $('#budgetSubmit').addClass("budgetAddSubmit");
+            $('#addBudget-modal').modal('toggle');
+
+
+        });
+        $('.budgetAddCancel').on('click', function () {
+            $('.BudgetName').val('');
+            $('.BudgetName').attr("placeholder", '');
+            $('.budgetDescription').val('');
+            $('.budgetDescription').attr("placeholder", '');
+            $('#budgetSubmit').removeClass("budgetAddSubmit");
+            $('#budgetSubmit').removeClass("budgetEditSubmit");
+        });
+        $(document).on('click', '.budgetAddSubmit', function () {
+            submitBudget(true);
+        });
+        $(document).on('click', '.budgetEditSubmit', function () {
+            submitBudget(false);
+        });
+        $(document).on('click', '.budgetBtn', function () {
+            LoadTransactionsByBudget($(this).val());
+
+        });
+
+
+
+        $(document).on('click', '.deleteBankAccount', function () {
+            deleteBankAccount($(this).val());
+
+        });
+        $(document).on('click', '.editbankAccount', function () {
+            getBankAccountInfo($(this).val());
+            $('#bankAccountSubmit').addClass("bankAccountEditSubmit");
+            $('#addBankAccount-modal').modal('toggle');
+
+        });
+        $('.addBankAccount').on('click', function () {
+            $('#bankAccountSubmit').addClass("bankAccountAddSubmit");
+            $('#addBankAccount-modal').modal('toggle');
+
+
+        });
+        $('.accountAddCancel').on('click', function () {
+            $('.BankAccountName').val('');
+            $('.BankAccountName').attr("placeholder", '');
+            $('.StartingBalance').val('');
+            $('.StartingBalance').attr("placeholder", '');
+            $('.WarningBalance').val('');
+            $('.WarningBalance').attr("placeholder", '');
+            $('#bankAccounttSubmit').removeClass("bankAccountAddSubmit");
+            $('#bankAccounttSubmit').removeClass("bankAccountEditSubmit");
+
+        });
+        $(document).on('click', '.bankAccountAddSubmit', function () {
+            submitBankAccount(true);
+        });
+        $(document).on('click', '.bankAccountEditSubmit', function () {
+            submitBankAccount(false);
+        });
+        $(document).on('click', '.bankAccountBtn', function () {
+            LoadTransactionsByAccount($(this).val());
+
+        });
+
 
         function loadHouseHold() {
             var url = '@Url.Action("LoadHouseHold", "HomeTableChart")'
@@ -563,6 +553,7 @@
                 url: url,
                 contentType: "application/json; charset=utf-8",
                 success: function (response) {
+                    console.log(response)
                     //loadnetWorth(response.bankAccounts, response.transactions)
                     loadBankAccounts(response.BankAccounts);
                     loadHouseHoldMembers(response.Members);
@@ -572,7 +563,7 @@
                 },
                 error: function (response) {
                     console.log(response)
-                
+
                     alert("Error while inserting data");
                 }
             });
@@ -593,101 +584,170 @@
         function loadBankAccounts(bankAccounts) {
             $('.AccountsInfo').empty();
             $('.AccountsInfo').append(`<h4 class="card-title"> Accounts</h4>`);
+            if (bankAccounts != null && bankAccounts.length >0) {
             bankAccounts.forEach(function (bankAccount) {
+                var bankAccountDisplayColor = checkRation(bankAccount.WarningBalance, bankAccount.CurrentBalance)
 
-                $('.AccountsInfo').append(
-                    `
-                    <div class="row">
-                        <div class="col-5">
-                     <span >${bankAccount.BankAccountName}</Span>
-                        </div>
-                       <div class="col-5">
-                     <span >${bankAccount.CurrentBalance}</Span>
-                        </div>
-                        <div class="col-2">
-                    <button id="${bankAccount.Id}"class="btn"><i class="fa fa-chevron-right"></i></button>
-                        </div>
+                $('.AccountsInfo').append(`<div class="card">
+                        <div class="card-header" id="heading${bankAccount.Id}">
+                            <div class="row ">
+                                <div class="col-5">
+                                    <button class="btn ${bankAccountDisplayColor}" type="button" data-toggle="collapse" data-target="#collapse${bankAccount.Id}" aria-expanded="true" aria-controls="collapse${bankAccount.Id}">${bankAccount.BankAccountName} </button>
+                                </div>
+                                <div class="col-5">
+                                   Balance $${bankAccount.CurrentBalance}
+                                </div>
+                                <div class="col-2">
+                                        <button class="btn ${bankAccountDisplayColor}" type="button" data-toggle="collapse" data-target="#collapse${bankAccount.Id}" aria-expanded="true" aria-controls="collapse${bankAccount.Id}"><i class="fa fa-chevron-right"></i></button>
 
-                    </div>
-                     <hr/>
-                    `
-                )
+                                </div>
+                            </div>
+
+                            <div id="collapse${bankAccount.Id}" class="collapse" aria-labelledby="heading${bankAccount.Id}" data-parent="#AccountsInfo">
+                                <div class="card-body">
+                                    <div class="row ">
+                                        <div class="col-3">
+                                            <button value="${bankAccount.Id}" class="btn btn-primary editbankAccount "> <i class="fa fa-pencil-square"></i> Edit</button>
+
+                                        </div>
+                                        <div class="col-4">
+                                            <button value="${bankAccount.Id}" class="btn btn-danger deleteBankAccount "><i class="fa fa-times"></i> Delete</button>
+
+                                        </div>
+                                        <div class="col-5">
+                                            <button value="${bankAccount.Id}" class="btn btn-success bankAccountBtn"><i class="fa fa-dollar"></i> Tranactions</button>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`
+                );
             });
+        }
+        else {
+                $('.AccountsInfo').append(`<h2>No Budgets Created</h2>
+                        `);
+        }
         };
             //function loadBankAccountCharts();
         function loadBudgets(Budgets) {
             $('.budgetInfo').empty();
-            Budgets.forEach(function (budget) {
-                if (budget.Description == null) {
-                    budget.Description = "No Description Available";
-                }
-                var budgetRatio = budget.CurrnetAmount / budget.TargetAmount
-                var curAmount = `<p class="text-success">${budget.CurrnetAmount}</p>`;
-                if (budgetRatio >= .5 && budgetRatio < .9) {
-                    curAmount = `<p class="text-warning">${budget.CurrnetAmount}</p>`
-                }
-                else if (budgetRatio >=.9) {
-                    curAmount = `<p class="text-danger">${budget.CurrnetAmount}</p>`
-                }
-                //var budgetItems;
-                //if (budget.BudgetItems == null || budget.BudgetItems.length < 1) {
-                //    budgetItems = `<p class="text-warning">No BudgetItems Assigned</p>`
-                //}
-                //else {
-                //    budget.BudgetItems.forEach(function (items) {
-                //        budgetItems= (`<div class="row">
-                //                    <div class="col-6">
-                //                       ${items.CurrnetAmount}
-                //                    </div>
-                //                     <div class="col-6">
-                //                        <span>${items.TargetAmount}</span>
-                //                    </div>
-                //                </div>`)
-                //    });
+            if (Budgets != null && Budgets.length > 0) {
+                Budgets.forEach(function (budget) {
+                    if (budget.Description == null) {
+                        budget.Description = "No Description Available";
+                    }
+                    var budgetDisplayColor = checkRation(budget.CurrentAmount, budget.TargetAmount)
 
-                //}
-                $('.budgetInfo').append(
-                    `
+
+                    var budgetItems;
+                    if (budget.BudgetItems == null || budget.BudgetItems.length < 1) {
+                        budgetItems = `<p class="text-warning">No Budget Items Assigned</p>`
+                    }
+                    else {
+                        budgetItems = ` <div class="row m-l-2">
+                        <div class="col-4">
+                            <h6>Budget Items</h6>
+                        </div>
+                        <div class="col-3">
+                            <h6>Currnet</h6>
+                        </div>
+                        <div class="col-2">
+                            <h6>Target</h6>
+                        </div>
+
+                                </div>`
+
+                        budget.BudgetItems.forEach(function (items) {
+                            var budgetItemDisplayColor = checkRation(items.CurrentAmount, items.TargetAmount)
+
+                            budgetItems = budgetItems + `<div class="row m-l-2">
+                                    <div class="col-5">
+                                     <button value="${items.Id}" class="btn  budgetItemsBtn">${items.ItemName}</i></button>
+
+                                         </div>
+                                    <div class="col-2">
+                                       <h6 class="${budgetItemDisplayColor}">${items.CurrentAmount}</h6>
+                                    </div>
+                                     <div class="col-2">
+                                        <h6>${items.TargetAmount}</h6>
+                                    </div>
+                                    <div class="col-3">
+                                         <button value="${items.Id}" class="btn btn-primary editBudgetItem " ><i class="fa fa-pencil-square"></i></button>
+                                         <button value="${items.Id}" class="btn btn-danger deleteBudgetItem "><i class="fa fa-times"></i></button>
+                                    </div>
+                                </div>`;
+
+                        });
+
+                    }
+                    $('.budgetInfo').append(
+                        `
                     <div class="card">
                         <div class="card-header" id="heading${budget.Id}">
+                            <div class="row ">
+                                     <div class="col-8">
                             <h2 class="mb-0">
-                                <button class="btn" type="button" data-toggle="collapse" data-target="#collapse${budget.Id}" aria-expanded="true" aria-controls="collapse${budget.Id}">
+                                <button class="btn ${budgetDisplayColor}" type="button" data-toggle="collapse" data-target="#collapse${budget.Id}" aria-expanded="true" aria-controls="collapse${budget.Id}">
                                     ${budget.BudgetName}
                                 </button>
                             </h2>
+                            </div>
+                            <div class="col-4">
+                                 <button value="${budget.Id}" class="btn btn-primary editBudget " ><i class="fa fa-pencil-square"></i></button>
+                                 <button value="${budget.Id}" class="btn btn-danger deleteBudget "><i class="fa fa-times"></i></button>
+                                <button value="${budget.Id}" class="btn btn-success budgetBtn"><i class="fa fa-dollar"></i></button>
+                             </div>
+                           </div>
                         </div>
 
                         <div id="collapse${budget.Id}" class="collapse" aria-labelledby="heading${budget.Id}" data-parent="#budgetInfo">
                             <div class="card-body">
                                 <div class="row ">
                                      <div class="col-6">
-                                        <span>Currnet Amount</span>
+                                        <h5>Currnet Amount</h5>
                                     </div>
                                         <div class="col-6">
-                                        <span>Target Amount</span>
+                                        <h5>Target Amount</h5>
                                     </div>
                                 </div>
 
                                  <div class="row">
                                     <div class="col-6">
-                                       ${curAmount}
+                                       <h5 class="${budgetDisplayColor}">${budget.CurrentAmount} </h5>
                                     </div>
                                      <div class="col-6">
-                                        <span>${budget.TargetAmount}</span>
+                                        <h5>${budget.TargetAmount} </h5>
                                     </div>
                                 </div>
 
-                                <div class="row m-l-5">
-
-                                ${budget.Description}
-                                </div>
+                                    ${budgetItems}
 
                             </div>
                         </div>
                     </div>`
-                )
-            });
+                    )
+                });
+            }
+            else {
+                $('.budgetInfo').append(`<h2>No Budgets Created</h2>
+                        `);
+            }
         };
+
+        function checkRation(currentAmount, targetAmount) {
+            var budgetRatio = currentAmount / targetAmount;
+
+            if (budgetRatio >= .5 && budgetRatio < .9) {
+                return  "text-warning";
+            }
+            else if (budgetRatio >= .9) {
+
+                return  "text-danger";
+            }
+        }
+        ////${budget.Description}
         function getRandomColorList(length) {
             var colors = [
                 'rgba(238, 198, 67',
@@ -734,29 +794,28 @@
                 },
                 ],
             }
-            //var options = {
-            //    onClick: (evt, item) => {
+            var options = {
+                onClick: (evt, item) => {
 
-            //        chart.update()
-            //        item[0]._model.outerRadius += 10
-            //        //load trasacton.budgetitem inf
-            //    },
-            //}
+                    chart.update()
+                    item[0]._model.outerRadius += 10
+                    LoadTransactionsByBudgetItem(item[0]['_model'].label)
+                },
+            }
             var chart = new Chart(budgetChart, {
                 type: 'pie',
                 data: budgetData,
-                //options: options,
+                options: options,
 
             });
 
         };
-
         function loadBudgetCharts(budgets) {
             var count = 0;
             $('.budgetCarousel-indicators').empty();
             $('.budgetCarousel-inner').empty();
             budgets.forEach(function (budget) {
-                if (budget.budgetItem != null && budget.budgetItem.length > 0) {
+                if (budget.BudgetItems != null && budget.BudgetItems.length > 0) {
 
                         $('.budgetCarousel-indicators').append(
                             `<li data-target="#budgetCarousel" style="background-color: black;"data-slide-to="${count}" ></li>`
@@ -765,7 +824,7 @@
                         $('.budgetCarousel-inner').append(
                             `<div class="carousel-item ">
                                  <h4 class="m-b-0 ">  ${budget.BudgetName}</h4>
-                                 <h6 class="m-b-0 m-l-10">Target Spending: ${budget.CurrnetAmount}</h6>
+                                 <h6 class="m-b-0 m-l-10">Target Spending: ${budget.TargetAmount},   Currnet Total: ${budget.CurrentAmount}</h6>
 
                                 <canvas id="budget${budget.Id}" ></canvas>
                               </div>
@@ -775,50 +834,50 @@
                         $('.carousel-item').first().addClass('active');
                         $('.carousel-indicators > li').first().addClass('active');
                         $('#budgetCarousel').carousel();
-                        setChartData(budget);
+                    setChartData(budget);
                         count++;
                     }
 
                     });
         }
-        function setBudgetItemsChartData(budgetItems) {
+        //function setBudgetItemsChartData(budgetItems) {
 
-            var labels = [];
-            var data = [];
-            budgetItems.Transactions.forEach(function (transaction) {
-                labels.push(budgetItems.ItemName);
-                data.push(transaction.TargetAmount);
-            });
+        //    var labels = [];
+        //    var data = [];
+        //    budgetItems.Transactions.forEach(function (transaction) {
+        //        labels.push(budgetItems.ItemName);
+        //        data.push(transaction.TargetAmount);
+        //    });
 
 
-            var budgetId = `budget${budget.Id}`;
-            var budgetChart = document.getElementById(budgetId);
-            var colorList = getRandomColorList(labels.length);
-            var budgetData = {
-                labels: labels,
-                datasets: [{
-                    data: data,
-                    backgroundColor: colorList,
+        //    var budgetId = `budget${budget.Id}`;
+        //    var budgetChart = document.getElementById(budgetId);
+        //    var colorList = getRandomColorList(labels.length);
+        //    var budgetData = {
+        //        labels: labels,
+        //        datasets: [{
+        //            data: data,
+        //            backgroundColor: colorList,
 
-                },
-                ],
-            }
-            //var options = {
-            //    onClick: (evt, item) => {
+        //        },
+        //        ],
+        //    }
+        //    var options = {
+        //        onClick: (evt, item) => {
 
-            //        chart.update()
-            //        item[0]._model.outerRadius += 10
-            //        //load trasacton.budgetitem inf
-            //    },
-            //}
-            var chart = new Chart(budgetChart, {
-                type: 'pie',
-                data: budgetData,
-                //options: options,
+        //            chart.update()
+        //            item[0]._model.outerRadius += 10
+        //            //load trasacton.budgetitem inf
+        //        },
+        //    }
+        //    var chart = new Chart(budgetChart, {
+        //        type: 'pie',
+        //        data: budgetData,
+        //        options: options,
 
-            });
+        //    });
 
-        };
+        //};
         function loadHouseHoldMembers(members) {
             members.forEach(function (member) {
                 $('.memberInfo').append(
@@ -827,7 +886,7 @@
                             <span ><img src=" ${member.AvatarPath}" alt="user"width="40"class="img-circle" /></Span><span class="m-l-20">${member.FullName}</Span>
                         </div>
                     <div class="col-2">
-                    <button id="${member.Id}"class="btn"><i class="fa fa-chevron-right"></i></button>
+                    <button value="${member.Id}" class="btn memberBtn"><i class="fa fa-chevron-right"></i></button>
                         </div>
 
                     </div>
@@ -841,13 +900,81 @@
             table.clear().draw();
             transactions.forEach(function (transaction) {
                 table.row.add([
-                    transaction.Created, transaction.BudgetItemName, transaction.TransactionType,transaction.Amount, `<button value="${transaction.Id}" class="btn btn-primary "><span><i class="fa fa-pencil-square editTransaction"></i></span></button><button value="${transaction.Id}" class="btn btn-danger deleteTransaction"><span><i class="fa fa-minus"></i></span></button>`
+                    transaction.Created, transaction.BudgetItemName, transaction.TransactionType, transaction.Amount, transaction.Memo, `<button value="${transaction.Id}" class="btn btn-primary editTransaction" <span><i class="fa fa-pencil-square editTransaction"></i></span></button><button value="${transaction.Id}" class="btn btn-danger deleteTransaction"><span><i class="fa fa-minus"></i></span></button>`
 
 
                 ]).draw().node().id = transaction.Id;
             })
 
         };
+        function LoadTransactionsByBudgetItem(budgetItemName){
+            var url = '@Url.Action("LoadTransactionsByBudgetItem", "HomeTableChart")'
+                        $.ajax({
+                            type: "POST",
+                            url: url,
+                            data: JSON.stringify({ 'budgetItemName': budgetItemName }),
+                            dataType: 'json',
+                            contentType: "application/json; charset=utf-8",
+                            success: function (response) {
+                                loadTransactions(response);
+                            },
+                            error: function (response) {
+                                console.log(response);
+                                alert("Error while inserting data");
+                            }
+                        });
+        }
+        function LoadTransactionsByMember(memberId){
+            var url = '@Url.Action("LoadTransactionsByMember", "HomeTableChart")'
+                        $.ajax({
+                            type: "POST",
+                            url: url,
+                            data: JSON.stringify({ 'memberId': memberId }),
+                            dataType: 'json',
+                            contentType: "application/json; charset=utf-8",
+                            success: function (response) {
+                                loadTransactions(response);
+                            },
+                            error: function (response) {
+                                console.log(response);
+                                alert("Error while inserting data");
+                            }
+                        });
+        }
+        function LoadTransactionsByAccount(accountId){
+            var url = '@Url.Action("LoadTransactionsByAccount", "HomeTableChart")'
+                        $.ajax({
+                            type: "POST",
+                            url: url,
+                            data: JSON.stringify({ 'accountId': accountId }),
+                            dataType: 'json',
+                            contentType: "application/json; charset=utf-8",
+                            success: function (response) {
+                                loadTransactions(response);
+                            },
+                            error: function (response) {
+                                console.log(response);
+                                alert("Error while inserting data");
+                            }
+                        });
+        }
+        function LoadTransactionsByBudget(budgetId){
+            var url = '@Url.Action("LoadTransactionsByBudget", "HomeTableChart")'
+                        $.ajax({
+                            type: "POST",
+                            url: url,
+                            data: JSON.stringify({ 'budgetId': budgetId }),
+                            dataType: 'json',
+                            contentType: "application/json; charset=utf-8",
+                            success: function (response) {
+                                loadTransactions(response);
+                            },
+                            error: function (response) {
+                                console.log(response);
+                                alert("Error while inserting data");
+                            }
+                        });
+        }
         //function clearValidation(entity) {
         //    var inputs = document.getElementById(entity).getElementsByClassName("inputs");
         //    var parent = $(this).closest('div');
@@ -882,5 +1009,343 @@
             })
             return isValid;
         }
+
+        function getTranasctionInfo(transactionId) {
+             var url = '@Url.Action("GetTransaction", "HomeTableChart")'
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: JSON.stringify({ 'transactionId': transactionId }),
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    //console.log(response);
+                    $('.AmountText').attr("placeholder", response.Amount);
+                    $('.AmountText').val(response.Amount);
+                    $('.memoText').attr("placeholder", response.memo);
+                    $('.memoText').val(response.Memo);
+                    $('#tranactionId').val(response.Id);
+                },
+                error: function (response) {
+                }
+            });
+        }
+        function getBankAccountInfo(bankAccountId) {
+            var url = '@Url.Action("GetBankAccount", "HomeTableChart")'
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: JSON.stringify({ 'bankAccountId': bankAccountId }),
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    $('.BankAccountName').attr("placeholder", response.BankAccountName);
+                    $('.BankAccountName').val(response.BankAccountName);
+                    $('.StartingBalance').attr("placeholder", response.StartingBalance);
+                    $('.StartingBalance').val(response.StartingBalance);
+                    $('.WarningBalance').attr("placeholder", response.WarningBalance);
+                    $('.WarningBalance').val(response.WarningBalance);
+                    $('#bankAccountId').val(response.Id);
+                },
+                error: function (response) {
+                    console.log(response);
+                }
+            });
+        }
+        function getBudgetInfo(budgetId) {
+            var url = '@Url.Action("GetBudget", "HomeTableChart")'
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: JSON.stringify({ 'budgetId': budgetId }),
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    $('.BudgetName').attr("placeholder", response.BudgetName);
+                    $('.BudgetName').val(response.BudgetName);
+                    $('.budgetDescription').attr("placeholder", response.Description);
+                    $('.budgetDescription').val(response.Description);
+                    $('#budgetId').val(response.Id);
+                },
+                error: function (response) {
+                    console.log(response);
+                }
+            });
+        }
+        function getBudgetItemInfo(budgetItemId) {
+            var url = '@Url.Action("GetBudgetItem", "HomeTableChart")'
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: JSON.stringify({ 'budgetItemId': budgetItemId }),
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    $('.BudgetItemName').attr("placeholder", response.ItemName);
+                    $('.BudgetItemName').val(response.ItemName);
+                    $('.budgetItemDescription').attr("placeholder", response.Description);
+                    $('.budgetItemDescription').val(response.Description);
+                    $('.budgetItemTargetAmount').attr("placeholder", response.TargetAmount);
+                    $('.budgetItemTargetAmount').val(response.TargetAmount);
+                    $('#budgetItemId').val(response.Id);
+                },
+                error: function (response) {
+                    console.log(response);
+                }
+            });
+        }
+
+        function deleteTransaction(transactionId) {
+            var url = '@Url.Action("DeleteTransaction", "HomeTableChart")'
+                        $.ajax({
+                            type: "POST",
+                            url: url,
+                            data: JSON.stringify({ 'transactionId': transactionId }),
+                            dataType: 'json',
+                            contentType: "application/json; charset=utf-8",
+                            success: function (response) {
+                                loadHouseHold();
+                            },
+                            error: function (response) {
+                                console.log(response);
+                                alert("Error while inserting data");
+                            }
+                        });
+        }
+        function deleteBudgetItem(budgetItemId) {
+            var url = '@Url.Action("DeleteBudgetItem", "HomeTableChart")'
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: JSON.stringify({ 'budgetItemId': budgetItemId }),
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    loadHouseHold();
+                },
+                error: function (response) {
+                    console.log(response);
+                    alert("Error while inserting data");
+                }
+            });
+        }
+        function deleteBudget(budgetId) {
+            var url = '@Url.Action("DeleteBudget", "HomeTableChart")'
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: JSON.stringify({ 'budgetId': budgetId }),
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    loadHouseHold();
+                },
+                error: function (response) {
+                    console.log(response);
+                    alert("Error while inserting data");
+                }
+            });
+        }
+        function deleteBankAccount(bankAccountId) {
+            var url = '@Url.Action("DeleteBankAccount", "HomeTableChart")'
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: JSON.stringify({ 'bankAccountId': bankAccountId }),
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                success: function (response) {
+                    loadHouseHold();
+                },
+                error: function (response) {
+                    console.log(response);
+                    alert("Error while inserting data");
+                }
+            });
+        }
+        function submitTransaction(addOrEdit) {
+
+            if (checkValid('.transactionInput') && checkIfNumeric(".AmountText"))  {
+                if (addOrEdit) {
+                    var url = '@Url.Action("AddTransaction", "HomeTableChart")'
+
+                }
+                else {
+                   var url = '@Url.Action("EditTransaction", "HomeTableChart")'
+                }
+                var Transaction = {
+                    Amount: $('.AmountText').val(),
+                    Memo: $('.memoText').val(),
+                    TransactionType: $('#TransactionType option:selected').val(),
+                    BudgetItemId: $('#BudgetsItemsList option:selected').val(),
+                    TransactionFile: $('.TransactionFile'),
+                    Id: $('#tranactionId').val(),
+                }
+                $('#addTransaction-modal').modal('toggle');
+                $('.AmountText').val('');
+                $('.AmountText').attr("placeholder", '');
+
+                $('.memoText').val('');
+                $('.memoText').attr("placeholder", '');
+
+                $('#tranactionId').val('');
+
+                $('#transactionSubmit').removeClass("transactionAddSubmit");
+                $('#transactionSubmit').removeClass("transactionEditSubmit");
+
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: JSON.stringify({ 'Transaction': Transaction}),
+                    dataType: 'json',
+                    contentType: "application/json; charset=utf-8",
+                    success: function (response) {
+                        loadHouseHold();
+                    },
+                    error: function (response) {
+                        alert("Error while inserting data");
+                    }
+
+                });
+            }
+        }
+        function submitBudgetItem(addOrEdit) {
+            if (checkValid('.budgetItemInput') && checkIfNumeric(".budgetItemTargetAmount")  )  {
+                  if (addOrEdit) {
+                    var url = '@Url.Action("AddBudgetItem", "HomeTableChart")'
+                }
+                else {
+                     var url = '@Url.Action("EditBudgetItem", "HomeTableChart")'
+
+                }
+                console.log($('#BudgetsList option:selected').val());
+                var newBudgetItem = {
+                    ItemName: $('.BudgetItemName').val(),
+                    Description: $('.budgetItemDescription').val(),
+                    TargetAmount: $('.budgetItemTargetAmount').val(),
+                    BudgetId: $('#BudgetsList option:selected').val(),
+
+                    Id: $('#budgetItemId').val(),
+                }
+                $('#addBudgetItem-modal').modal('toggle');
+                $('.BudgetItemInput').val('');
+                $('.BudgetItemInput').attr("placeholder", '');
+
+                $('#budgetItemSubmit').removeClass("budgetItemAddSubmit");
+                $('#budgetItemSubmit').removeClass("budgetItemEditSubmit");
+
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: JSON.stringify({ 'newBudgetItem': newBudgetItem }),
+                    dataType: 'json',
+                    contentType: "application/json; charset=utf-8",
+                    success: function (response) {
+                        loadHouseHold();
+                    },
+                    error: function (response) {
+                        alert("Error while inserting data");
+                    }
+
+                });
+            }
+
+        }
+
+        function submitBudget(addOrEdit) {
+
+            if (checkValid('.budgetInput')  )  {
+                if (addOrEdit) {
+                    var url = '@Url.Action("AddBudget", "HomeTableChart")'
+                }
+                else {
+                     var url = '@Url.Action("EditBudget", "HomeTableChart")'
+
+                }
+                var newbudget = {
+                    BudgetName: $('.BudgetName').val(),
+                    Description: $('.budgetDescription').val(),
+                    BankAccontId: $('#AccountList option:selected').val(),
+                    Id: $('#budgetId').val(),
+                }
+                $('#addBudget-modal').modal('toggle');
+                $('.BudgetInput').val('');
+                $('.BudgetInput').attr("placeholder", '');
+
+                $('#budgetId').val('');
+                $('#budgetSubmit').removeClass("budgetAddSubmit");
+                $('#budgetSubmit').removeClass("budgetEditSubmit");
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: JSON.stringify({ 'newbudget': newbudget }),
+                    dataType: 'json',
+                    contentType: "application/json; charset=utf-8",
+                    success: function (response) {
+                        loadHouseHold();
+                    },
+                    error: function (response) {
+                        alert("Error while inserting data");
+                    }
+
+                });
+            }
+        }
+        function submitBankAccount(addOrEdit) {
+            if (checkValid('.accountInput') && checkIfNumeric(".StartingBalance") && checkIfNumeric(".WarningBalance") )  {
+                   if (addOrEdit) {
+                    var url = '@Url.Action("AddAccount", "HomeTableChart")'
+                }
+                else {
+                     var url = '@Url.Action("EditBankAccount", "HomeTableChart")'
+
+                }
+                var newbankAccount = {
+                    BankAccountName: $('.BankAccountName').val(),
+                    StartingBalance: $('.StartingBalance').val(),
+                    WarningBalance: $('.WarningBalance').val(),
+                    BudgetItemId: $('#AccountType option:selected').val(),
+                    Id: $('#bankAccountId').val(),
+
+
+                }
+                $('#addBankAccount-modal').modal('toggle');
+                $('.accountInput').val('');
+                $('.accountInput').attr("placeholder", '');
+
+                $('#bankAccountId').val('');
+                $('#bankAccountSubmit').removeClass("bankAccountAddSubmit");
+                $('#bankAccountSubmit').removeClass("bankAccountEditSubmit");
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: JSON.stringify({ 'newbankAccount': newbankAccount }),
+                    dataType: 'json',
+                    contentType: "application/json; charset=utf-8",
+                    success: function (response) {
+                        loadHouseHold();
+                    },
+                    error: function (response) {
+                        alert("Error while inserting data");
+                    }
+
+                });
+            }
+        }
     </script>
 }
+@* <button value="${transaction.Id}" class="btn btn-primary editTransaction" <span><i class="fa fa-pencil-square editTransaction"></i></span></button>
+
+    //var oldTransactionId;
+        //$('.TransactionsTable').on('click', '.editTransaction', function () {
+
+        //    oldTransactionId = $(this).val();
+        //    var table = $('TransactionsTable').DataTable();
+        //    var row = table.rows($(this).val()).data();
+        //    console.log(row);
+        //});
+
+        //$('.editTransactionSubmit').on('click', function () {
+
+        //});
+*@

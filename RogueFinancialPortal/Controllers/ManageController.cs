@@ -18,7 +18,11 @@ namespace RogueFinancialPortal.Controllers
 {
     [Authorize]
     public class ManageController : Controller
+        
     {
+        UserRoleHelper roleHelper = new UserRoleHelper();
+
+        NotificationHelper notificationHelper = new NotificationHelper();
         private ApplicationDbContext db = new ApplicationDbContext();
 
         private ApplicationSignInManager _signInManager;
@@ -57,7 +61,28 @@ namespace RogueFinancialPortal.Controllers
                 _userManager = value;
             }
         }
+        public JsonResult GetNotification() {
 
+            return Json(notificationHelper.GetNotifications());
+        }
+        public JsonResult DeleteNotification(int notifcationId)
+        {
+            var notification = db.Notifications.Find(notifcationId);
+            notification.IsRead = true;
+            db.SaveChanges();
+            return Json(true);
+        }
+        public ActionResult LeaveHouseHold()
+        {
+            var userId = User.Identity.GetUserId();
+            var houseHoldId = (int)User.Identity.GetHouseHoldId();
+            if (roleHelper.ListUserRoles(userId).FirstOrDefault() == "Head")
+            {
+                ViewBag.Members = new SelectList(db.Users.Where(u => u.HouseHoldId == houseHoldId).ToList());
+               
+            }
+            return View();
+        }
         //
         // GET: /Manage/Index
         public async Task<ActionResult> Index(ManageMessageId? message)

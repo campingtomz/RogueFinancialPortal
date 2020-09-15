@@ -20,7 +20,7 @@ namespace RogueFinancialPortal.Extensions
 
         public static void UpdateBalance(this Transaction transaction)
         {
-            
+          
                 UpdateBankBalance(transaction);
                 UpdateBudgetAmount(transaction);
                 UpdateBudgetItemAmount(transaction);  
@@ -30,13 +30,13 @@ namespace RogueFinancialPortal.Extensions
         public static void UpdateBankBalance(Transaction transaction)
 
         {
-            var bankAccount = db.BankAccounts.Find(transaction.AccountId);
+            var bankAccount = db.BankAccounts.Find(transaction.BankAccontId);
 
             if (transaction.TransactionType == TransactionType.Withdrawal)
             {
                 bankAccount.CurrentBalance -= transaction.Amount;
             }
-            else if (transaction.TransactionType == TransactionType.Deposit)
+            else if (transaction.TransactionType == TransactionType.Deposit || transaction.TransactionType == TransactionType.Refund)
             {
                 bankAccount.CurrentBalance += transaction.Amount;
 
@@ -46,21 +46,40 @@ namespace RogueFinancialPortal.Extensions
         {
             var budgetItem = db.BudgetItems.Find(transaction.BudgetItemId);
             var budget = db.Budgets.Find(budgetItem.BudgetId);
-            budget.CurrnetAmount += transaction.Amount;
+            if (transaction.TransactionType == TransactionType.Withdrawal)
+            {
+                budget.CurrentAmount += transaction.Amount;
+            }
+            else if (transaction.TransactionType == TransactionType.Refund)
+            {
+                budget.CurrentAmount -= transaction.Amount;
+
+            }
+            
           
         }
         public static void UpdateBudgetItemAmount(Transaction transaction)
         {
             var budgetItem = db.BudgetItems.Find(transaction.BudgetItemId);
-            budgetItem.CurrnetAmount += transaction.Amount;
+            if (transaction.TransactionType == TransactionType.Withdrawal)
+            {
+                budgetItem.CurrentAmount += transaction.Amount;
+            }
+            else if (transaction.TransactionType == TransactionType.Refund)
+            {
+                budgetItem.CurrentAmount -= transaction.Amount;
+
+            }
+           
            
         }
 
-        public static void EditTransaction(this Transaction newTransaction, Transaction OldTransaction)
+        public static void EditTransaction(this Transaction transaction)
         {
-            OldTransaction.DeleteTransaction();
-            UpdateBalance(newTransaction);
-            db.SaveChanges();
+            //var oldTranaction = db.Transactions.AsNoTracking().FirstOrDefault(t=>t.Id==transaction.Id);
+            transaction.Amount *= -1;
+            UpdateBalance(transaction);
+            
         }
         public static void DeleteTransaction(this Transaction transaction)
         {

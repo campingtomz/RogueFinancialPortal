@@ -39,7 +39,9 @@ namespace RogueFinancialPortal.Migrations
             var adminPassword = WebConfigurationManager.AppSettings["AdminPassword"];
             var demoPassword = WebConfigurationManager.AppSettings["DemoPassword"];
             var DemoHomeUser = WebConfigurationManager.AppSettings["DH"];
-            var DemoMeberUser = WebConfigurationManager.AppSettings["DM"];
+            var DemoDefaultUser = WebConfigurationManager.AppSettings["DD"];
+
+            var DemoMemberUser = WebConfigurationManager.AppSettings["DM"];
 
             #region User Roles
 
@@ -104,12 +106,12 @@ namespace RogueFinancialPortal.Migrations
             userManager.AddToRole(userId, "Admin");
 
 
-            if (!context.Users.Any(u => u.Email == DemoMeberUser))
+            if (!context.Users.Any(u => u.Email == DemoMemberUser))
             {
                 userManager.Create(new ApplicationUser()
                 {
-                    Email = DemoMeberUser,
-                    UserName = DemoMeberUser,
+                    Email = DemoMemberUser,
+                    UserName = DemoMemberUser,
                     FirstName = "Member",
                     LastName = "Demo",
                     PhoneNumber = RandomPhoneNumber(),
@@ -118,8 +120,25 @@ namespace RogueFinancialPortal.Migrations
                 },
                 demoPassword);
             }
-            userId = userManager.FindByEmail(DemoMeberUser).Id;
+            userId = userManager.FindByEmail(DemoMemberUser).Id;
             userManager.AddToRole(userId, "Member");
+
+            if (!context.Users.Any(u => u.Email == DemoDefaultUser))
+            {
+                userManager.Create(new ApplicationUser()
+                {
+                    Email = DemoDefaultUser,
+                    UserName = DemoDefaultUser,
+                    FirstName = "Default",
+                    LastName = "Demo",
+                    PhoneNumber = RandomPhoneNumber(),
+
+
+                },
+                demoPassword);
+            }
+            userId = userManager.FindByEmail(DemoDefaultUser).Id;
+            userManager.AddToRole(userId, "Default");
 
 
             if (!context.Users.Any(u => u.Email == DemoHomeUser))
@@ -347,7 +366,7 @@ namespace RogueFinancialPortal.Migrations
                         Created = DateTime.Now,
                         BudgetId = budget.Id,
                         TargetAmount = 100,
-                        CurrnetAmount = 50,
+                        CurrentAmount = 50,
                         OwnerId = houseHoldMembers[rand.Next(houseHoldMembers.Count)].Id,
                         ItemName = "Electric",
                         Transactions = new HashSet<Transaction>()
@@ -359,7 +378,7 @@ namespace RogueFinancialPortal.Migrations
                         Created = DateTime.Now,
                         BudgetId = budget.Id,
                         TargetAmount = 100,
-                        CurrnetAmount = 25,
+                        CurrentAmount = 25,
                         OwnerId = houseHoldMembers[rand.Next(houseHoldMembers.Count)].Id,
                         ItemName = "Water",
                         Transactions = new HashSet<Transaction>()
@@ -370,7 +389,7 @@ namespace RogueFinancialPortal.Migrations
                         Created = DateTime.Now,
                         BudgetId = budget.Id,
                         TargetAmount = 100,
-                        CurrnetAmount = 60,
+                        CurrentAmount = 60,
                         OwnerId = houseHoldMembers[rand.Next(houseHoldMembers.Count)].Id,
                         ItemName = "Cell Phone",
                         Transactions = new HashSet<Transaction>()
@@ -385,7 +404,7 @@ namespace RogueFinancialPortal.Migrations
                         Created = DateTime.Now,
                         BudgetId = budget.Id,
                         TargetAmount = 400,
-                        CurrnetAmount = 250,
+                        CurrentAmount = 250,
                         OwnerId = houseHoldMembers[rand.Next(houseHoldMembers.Count)].Id,
                         ItemName = "Groceries",
                         Transactions = new HashSet<Transaction>()
@@ -396,7 +415,7 @@ namespace RogueFinancialPortal.Migrations
                         Created = DateTime.Now,
                         BudgetId = budget.Id,
                         TargetAmount = 100,
-                        CurrnetAmount = 50,
+                        CurrentAmount = 50,
                         OwnerId = houseHoldMembers[rand.Next(houseHoldMembers.Count)].Id,
                         ItemName = "TakeOut",
                         Transactions = new HashSet<Transaction>()
@@ -407,7 +426,7 @@ namespace RogueFinancialPortal.Migrations
                         Created = DateTime.Now,
                         BudgetId = budget.Id,
                         TargetAmount = 80,
-                        CurrnetAmount = 75,
+                        CurrentAmount = 75,
                         OwnerId = houseHoldMembers[rand.Next(houseHoldMembers.Count)].Id,
                         ItemName = "Pizza",
                         Transactions = new HashSet<Transaction>()
@@ -421,7 +440,7 @@ namespace RogueFinancialPortal.Migrations
                         Created = DateTime.Now,
                         BudgetId = budget.Id,
                         TargetAmount = 300,
-                        CurrnetAmount = 150,
+                        CurrentAmount = 150,
                         OwnerId = houseHoldMembers[rand.Next(houseHoldMembers.Count)].Id,
                         ItemName = "CarPayment",
                         Transactions = new HashSet<Transaction>()
@@ -432,7 +451,7 @@ namespace RogueFinancialPortal.Migrations
                         Created = DateTime.Now,
                         BudgetId = budget.Id,
                         TargetAmount = 800,
-                        CurrnetAmount = 150,
+                        CurrentAmount = 150,
                         OwnerId = houseHoldMembers[rand.Next(houseHoldMembers.Count)].Id,
                         ItemName = "Rent",
                         Transactions = new HashSet<Transaction>()
@@ -447,7 +466,7 @@ namespace RogueFinancialPortal.Migrations
                         Created = DateTime.Now,
                         BudgetId = budget.Id,
                         TargetAmount = 300,
-                        CurrnetAmount = 170,
+                        CurrentAmount = 170,
                         OwnerId = houseHoldMembers[rand.Next(houseHoldMembers.Count)].Id,
                         ItemName = "Roof",
                         Transactions = new HashSet<Transaction>()
@@ -463,6 +482,7 @@ namespace RogueFinancialPortal.Migrations
             context.SaveChanges();
 
             #region seed transactions
+
             #endregion
             context.SaveChanges();
 

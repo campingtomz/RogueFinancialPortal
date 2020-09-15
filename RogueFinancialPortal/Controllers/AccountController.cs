@@ -374,6 +374,13 @@ namespace RogueFinancialPortal.Controllers
             }
             return View();
         }
+        public ActionResult DeleteInvitation(int invitationId)
+        {
+            var invitation = db.Invitations.Find(invitationId);
+            invitation.IsValid = false;
+            db.SaveChanges();
+            return RedirectToAction("Index", "Home");
+        }
         //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]

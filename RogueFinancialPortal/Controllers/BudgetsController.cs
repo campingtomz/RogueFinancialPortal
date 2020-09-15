@@ -98,7 +98,7 @@ namespace RogueFinancialPortal.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,HouseHoldId,OwnerId,BudgetName,Created,CurrnetAmount")] Budget budget)
+        public ActionResult Edit([Bind(Include = "Id,HouseHoldId,OwnerId,BudgetName,Created,CurrentAmount")] Budget budget)
         {
             if (ModelState.IsValid)
             {

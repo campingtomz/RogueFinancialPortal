@@ -30,8 +30,9 @@ namespace RogueFinancialPortal.Models
         public string BudgetName { get; set; }
 
         public DateTime Created { get; set; }
+        public bool IsDeleted { get; set; }
         [Display(Name = "Currnet Amount")]
-        public decimal CurrnetAmount { get; set; }
+        public decimal CurrentAmount { get; set; }
         [NotMapped]
         [Display(Name = "Target Amount")]
         public decimal TargetAmount {

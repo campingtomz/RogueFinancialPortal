@@ -187,8 +187,6 @@
     <Compile Include="Controllers\HouseHoldsController.cs" />
     <Compile Include="Controllers\InvitationsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Controllers\NotificationsController.cs" />
-    <Compile Include="Controllers\TransactionAttachmentsController.cs" />
     <Compile Include="Controllers\TransactionsController.cs" />
     <Compile Include="Enums\AccountType.cs" />
     <Compile Include="Enums\ApplicationSettings.cs" />
@@ -221,16 +219,22 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BankAccount.cs" />
     <Compile Include="Models\Budget.cs" />
+    <Compile Include="Models\BudgetItemHistory.cs" />
     <Compile Include="Models\BudgetItem.cs" />
+    <Compile Include="Models\BankAccountNotification.cs" />
+    <Compile Include="Models\BudgetItemNotification.cs" />
     <Compile Include="Models\EmailModel.cs" />
+    <Compile Include="Models\BudgetHistory.cs" />
+    <Compile Include="Models\BankAccountHistory.cs" />
+    <Compile Include="Models\BudgetNotification.cs" />
     <Compile Include="Models\History.cs" />
+    <Compile Include="Models\TransactionHistory.cs" />
     <Compile Include="Models\HouseHold.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Invitation.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Notification.cs" />
     <Compile Include="Models\Transaction.cs" />
-    <Compile Include="Models\TransactionAttachment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\BankAccountWizardVM.cs" />
@@ -243,6 +247,7 @@
     <Compile Include="ViewModels\HomeMemberVM.cs" />
     <Compile Include="ViewModels\HomeTransactionsVM.cs" />
     <Compile Include="ViewModels\HouseHoldCreationWizardVM.cs" />
+    <Compile Include="ViewModels\InvitationVM.cs" />
     <Compile Include="ViewModels\ManageUserVm.cs" />
     <Compile Include="Views\Account\delete some bs.cs" />
   </ItemGroup>
@@ -807,6 +812,7 @@
     <Content Include="Content\scss\variable.scss" />
     <Content Include="Content\scss\widgets.scss" />
     <Content Include="private.config" />
+    <None Include="Properties\PublishProfiles\RogueFinancialPortal - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.5.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.5.1.js" />
     <Content Include="Scripts\jquery-3.5.1.min.js" />
@@ -1106,6 +1112,8 @@
     <Content Include="Views\Account\AcceptInvitaiton.cshtml" />
     <Content Include="Views\Account\InvitationError.cshtml" />
     <Content Include="Views\HouseHolds\LeaveAsync.cshtml" />
+    <Content Include="Views\Manage\LeaveHouseHold.cshtml" />
+    <Content Include="Views\Home\DefaultIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

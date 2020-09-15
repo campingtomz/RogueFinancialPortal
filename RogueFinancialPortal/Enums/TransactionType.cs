@@ -9,6 +9,8 @@ namespace RogueFinancialPortal.Enums
     {
         Deposit,
         Withdrawal,
-        Transfer
+        Transfer,
+        Refund,
+
     }
 }

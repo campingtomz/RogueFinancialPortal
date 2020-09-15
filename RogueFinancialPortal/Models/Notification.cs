@@ -6,37 +6,19 @@ using System.Web;
 
 namespace RogueFinancialPortal.Models
 {
-    public class Notification
+    public abstract class Notification
     {
         public int Id { get; set; }
         #region Parents/Children
-        public int HouseHoldId { get; set; }     
-        public virtual HouseHold HouseHold { get; set; }
-     
-
+        public int HouseHoldId { get; set; }
+        public string UserId { get; set; }
+        //public virtual ApplicationUser User { get; set; }
         #endregion
-        #region Actual Properties
-
-        public string RecipentId { get; set; }
-        public virtual ApplicationUser Recipent { get; set; }
+        #region Actual Property
         public string Subject { get; set; }
-        public string Body { get; set; }
+        public string Message { get; set; }
         public DateTime Created { get; set; }
-        public int TTL { get; internal set; }
         public bool IsRead { get; set; }
-
-        #endregion
-        #region virtual   
-
-
-
-        #endregion
-        #region Constructor
-        public Notification()
-        {
-            Created = DateTime.Now;
-        }
-
         #endregion
     }
 }

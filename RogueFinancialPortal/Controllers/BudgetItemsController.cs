@@ -51,7 +51,7 @@ namespace RogueFinancialPortal.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,OwnerId,BudgetId,ItemName,Created,CurrnetAmount,TargetAmount,IsDeleted")] BudgetItem budgetItem)
+        public ActionResult Create([Bind(Include = "Id,OwnerId,BudgetId,ItemName,Created,CurrentAmount,TargetAmount,IsDeleted")] BudgetItem budgetItem)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +87,7 @@ namespace RogueFinancialPortal.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,HouseHoldId,OwnerId,BudgetId,ItemName,Created,CurrnetAmount,TargetAmount,IsDeleted")] BudgetItem budgetItem)
+        public ActionResult Edit([Bind(Include = "Id,HouseHoldId,OwnerId,BudgetId,ItemName,Created,CurrentAmount,TargetAmount,IsDeleted")] BudgetItem budgetItem)
         {
             if (ModelState.IsValid)
             {

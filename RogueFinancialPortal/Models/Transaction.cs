@@ -14,11 +14,10 @@ namespace RogueFinancialPortal.Models
         public int Id { get; set; }
 
         #region Parents/Children
-        [Display(Name = "Bank Account")]
+        
         public string OwnerId { get; set; }
         public virtual ApplicationUser Owner { get; set; }
-
-        public int AccountId { get; set; }
+        public int BankAccontId { get; set; }
         public virtual BankAccount BanckAccount { get; set; }
         public int? BudgetItemId { get; set; }
         public virtual BudgetItem BudgetItem { get; set; }

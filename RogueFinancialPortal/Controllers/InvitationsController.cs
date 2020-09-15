@@ -22,7 +22,7 @@ namespace RogueFinancialPortal.Controllers
         // GET: Invitations
        
         // GET: Invitations/Create
-        //[Authorize(Roles = "Head")]
+        [Authorize(Roles = "Head")]
         public ActionResult Create()
         {
             var hhId = User.Identity.GetHouseHoldId();

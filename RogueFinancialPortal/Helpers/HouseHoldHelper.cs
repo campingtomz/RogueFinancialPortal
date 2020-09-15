@@ -18,5 +18,6 @@ namespace RogueFinancialPortal.Helpers
         {
             return db.Users.Where(u => u.HouseHoldId == houseHoldId).ToList();
         }
+        
     }
 }

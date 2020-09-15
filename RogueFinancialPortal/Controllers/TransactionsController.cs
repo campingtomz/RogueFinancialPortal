@@ -84,7 +84,7 @@ namespace RogueFinancialPortal.Controllers
 
                 db.SaveChanges();
                 var newTransaction = db.Transactions.AsNoTracking().FirstOrDefault(t => t.Id == transaction.Id);
-                newTransaction.EditTransaction(oldTransaction);
+                //newTransaction.EditTransaction(oldTransaction);
 
                 return RedirectToAction("Index");
             }

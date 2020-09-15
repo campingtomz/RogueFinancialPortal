@@ -89,41 +89,41 @@
                             </div>
                         </div>*@
 
-                    <div class="form-group text-center">
-                        <div class="row ">
-                            <div class="col-12">
-                                @using (Html.BeginForm("DemoLoginAsync", "Account", FormMethod.Post))
-                                {
-                                    @Html.AntiForgeryToken();
-                                    @Html.Hidden("emailKey", "DA")
-                                    <button type="submit" class="btn btn-info  btn-block waves-effect waves-light"> Demo Admin </button>
-                                }
-                            </div>
-                        </div>
-                        <div class="row ">
-                            <div class="col-12">
+                <div class="form-group text-center">
 
-                                @using (Html.BeginForm("DemoLoginAsync", "Account", FormMethod.Post))
-                                {
-                                    @Html.AntiForgeryToken();
-                                    @Html.Hidden("emailKey", "DH")
-                                    <button type="submit" class="btn btn-info  btn-block waves-effect waves-light"> Demo Head User </button>
-                                }
-                            </div>
-                        </div>
-                        <div class="row ">
-                            <div class="col-12">
-                                @using (Html.BeginForm("DemoLoginAsync", "Account", FormMethod.Post))
-                                {
-                                    @Html.AntiForgeryToken();
-                                    @Html.Hidden("emailKey", "DM")
-                                    <button type="submit" class="btn btn-info  btn-block  waves-effect waves-light"> Demo Member </button>
-                                }
-                            </div>
-                        </div>
+                    <div class="row ">
+                        <div class="col-12">
 
-
+                            @using (Html.BeginForm("DemoLoginAsync", "Account", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken();
+                                @Html.Hidden("emailKey", "DH")
+                                <button type="submit" class="btn btn-info  btn-block waves-effect waves-light"> Demo Head User </button>
+                            }
+                        </div>
                     </div>
+                    <div class="row ">
+                        <div class="col-12">
+                            @using (Html.BeginForm("DemoLoginAsync", "Account", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken();
+                                @Html.Hidden("emailKey", "DM")
+                                <button type="submit" class="btn btn-info  btn-block  waves-effect waves-light"> Demo Member </button>
+                            }
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div class="col-12">
+                            @using (Html.BeginForm("DemoLoginAsync", "Account", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken();
+                                @Html.Hidden("emailKey", "DD")
+                                <button type="submit" class="btn btn-info  btn-block waves-effect waves-light"> Demo Default </button>
+                            }
+                        </div>
+                    </div>
+
+                </div>
                 </div>
             </div>
         </div>

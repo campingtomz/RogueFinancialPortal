@@ -1,35 +1,39 @@
 ﻿@using Microsoft.AspNet.Identity
 @using RogueFinancialPortal.Helpers;
 @{ var userHelper = new UserHelper(); }
-@{ var roleHelper = new UserRoleHelper(); }
+@{ var roleHelper = new UserRoleHelper();
+    var notificationHelper = new NotificationHelper();}
 @if (Request.IsAuthenticated)
 {
     var user = userHelper.getUser(User.Identity.GetUserId());
 
     <div class="navbar-collapse collapse">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item"> <a class="nav-link nav-toggler hidden-md-up text-muted waves-effect waves-dark" href="javascript:void(0)"><i class="mdi mdi-menu"></i></a> </li>
-            @*<li class="nav-item m-l-10"> <a class="nav-link sidebartoggler hidden-sm-down text-muted waves-effect waves-dark" href="javascript:void(0)"><i class="ti-menu"></i></a> </li>
+            @*<li class="nav-item"> <a class="nav-link nav-toggler hidden-md-up text-muted waves-effect waves-dark" href="javascript:void(0)"><i class="mdi mdi-menu"></i></a> </li>
+            <li class="nav-item m-l-10"> <a class="nav-link sidebartoggler hidden-sm-down text-muted waves-effect waves-dark" href="javascript:void(0)"><i class="ti-menu"></i></a> </li>*@
 
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle text-muted text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="mdi mdi-message"></i>
-                    <div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div>
-                </a>
+                    @if (notificationHelper.NotificationCount() > 0)
+                    {
+                        <div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div>
+                    }
+                    </a>
                 <div class="dropdown-menu mailbox animated slideInUp">
                     <ul>
                         <li>
                             <div class="drop-title">Notifications</div>
                         </li>
-                        @if (user.ProjectNotifications.Count > 0)
+                        @if (notificationHelper.NotificationCount() > 0)
                         {
                             <li>
                                 <div class="message-center">
 
-                                    @foreach (var notification in user.ProjectNotifications.OrderByDescending(n => n.Created).Take(5))
+                                    @foreach (var notification in notificationHelper.GetNotifications().OrderByDescending(n => n.Created).Take(5))
                                     {
 
-                                         Message 
+                                         
                                         <a href="#">
                                             <div class="btn btn-danger btn-circle"><i class="fa fa-link"></i></div>
                                             <div class="mail-contnet">
@@ -40,8 +44,8 @@
                                 </div>
                             </li>
                             <li>
-                                <a href="@Url.Action( "DisplayNotifications", "UserManagment", new { userid = user.Id })" class="nav-link text-center"><strong>Check all notifications</strong> <i class="fa fa-angle-right"></i></a>
-                                <a class="nav-link text-center" href="javascript:void(0);"> <strong>Check all notifications</strong> <i class="fa fa-angle-right"></i> </a>
+                                <a href="@Url.Action( "Index", "Manage")" class="nav-link text-center"><strong>Check all notifications</strong> <i class="fa fa-angle-right"></i></a>
+                                @*<a class="nav-link text-center" href="javascript:void(0);"> <strong>Check all notifications</strong> <i class="fa fa-angle-right"></i> </a>*@
                             </li>
                         }
                         else
@@ -54,7 +58,7 @@
                         }
                     </ul>
                 </div>
-            </li>*@
+            </li>
 
         </ul>
 

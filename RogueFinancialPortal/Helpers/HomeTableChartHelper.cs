@@ -1,4 +1,6 @@
-﻿using RogueFinancialPortal.Models;
+﻿using RogueFinancialPortal.Enums;
+using RogueFinancialPortal.Extensions;
+using RogueFinancialPortal.Models;
 using RogueFinancialPortal.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -10,26 +12,30 @@ namespace RogueFinancialPortal.Helpers
     public class HomeTableChartHelper
     {
         private ApplicationDbContext db = new ApplicationDbContext();
-
+        NotificationHelper notificationHelper = new NotificationHelper();
+        HistoryHelper historyHelper = new HistoryHelper();
         public List<HomeBankAccountVM> GetHouseHoldAccounts(int houseHoldId)
         {
             var household = db.HouseHolds.Find(houseHoldId);
             List<HomeBankAccountVM> bankAccounts = new List<HomeBankAccountVM>();
             foreach (var bankAccount in household.BankAccounts.ToList())
             {
-                HomeBankAccountVM newBankAccountWizardVM = new HomeBankAccountVM
+                if (!bankAccount.IsDeleted)
                 {
-                    Id = bankAccount.Id,
-                    Created = bankAccount.Created.ToString("MMM dd yyyy"),
-                    BankAccountName = bankAccount.BankAccountName,
-                    StartingBalance = bankAccount.StartingBalance,
-                    CurrentBalance = bankAccount.CurrentBalance,
+                    HomeBankAccountVM newBankAccountWizardVM = new HomeBankAccountVM
+                    {
+                        Id = bankAccount.Id,
+                        Created = bankAccount.Created.ToString("MMM dd yyyy"),
+                        BankAccountName = bankAccount.BankAccountName,
+                        StartingBalance = bankAccount.StartingBalance,
+                        CurrentBalance = bankAccount.CurrentBalance,
 
-                    WarningBalance = bankAccount.WarningBalance,
-                    AccountType = bankAccount.AccountType
+                        WarningBalance = bankAccount.WarningBalance,
+                        AccountType = bankAccount.AccountType
 
-                };
-                bankAccounts.Add(newBankAccountWizardVM);
+                    };
+                    bankAccounts.Add(newBankAccountWizardVM);
+                }
             }
             return bankAccounts;
         }
@@ -39,50 +45,52 @@ namespace RogueFinancialPortal.Helpers
             List<HomeBudgetVm> budgets = new List<HomeBudgetVm>();
             foreach (var budget in household.Budgets.ToList())
             {
-                HomeBudgetVm newBudgets = new HomeBudgetVm
+                if (!budget.IsDeleted)
                 {
-                    Id = budget.Id,
-                    BudgetName = budget.BudgetName,
-                    Description = budget.Description,
-                    OwnerId = budget.OwnerId,
-                    BankAccontId = budget.BankAccontId,
-                    Created = budget.Created.ToString("MMM dd yyyy"),
-                    CurrnetAmount = budget.CurrnetAmount,
-                    TargetAmount = budget.TargetAmount,
-                    //BudgetItems = GethomeBudgetItems(budget.Id)
+                    HomeBudgetVm newBudgets = new HomeBudgetVm
+                    {
+                        Id = budget.Id,
+                        BudgetName = budget.BudgetName,
+                        Description = budget.Description,
+                        OwnerId = budget.OwnerId,
+                        BankAccontId = budget.BankAccontId,
+                        Created = budget.Created.ToString("MMM dd yyyy"),
+                        CurrentAmount = budget.CurrentAmount,
+                        TargetAmount = budget.TargetAmount,
+                        BudgetItems = GethomeBudgetItems(budget.Id)
 
-                };
-                budgets.Add(newBudgets);
+                    };
+                    budgets.Add(newBudgets);
+                }
             }
             return budgets;
         }
         public List<HomeBudgetItemsVM> GethomeBudgetItems(int budgetId)
         {
-           
-            List<HomeBudgetItemsVM> budgetItems = new List<HomeBudgetItemsVM>();
-           
-            
-                var householdBudgetItems = db.BudgetItems.Where(bi => bi.BudgetId == budgetId).ToList();
-                foreach (var budgetItem in householdBudgetItems)
-                {
-                    if (budgetItem.IsDeleted == false)
-                    {
-                        HomeBudgetItemsVM newBudgetItems = new HomeBudgetItemsVM
-                        {
-                            Id = budgetItem.Id,
 
-                            ItemName = budgetItem.ItemName,
-                            Description = budgetItem.Description,
-                            BudgetItemId = budgetItem.BudgetId,
-                            OwnerId = budgetItem.OwnerId,
-                            Created = budgetItem.Created.ToString("MMM dd yyyy"),
-                            BudgetId = budgetItem.BudgetId,
-                            TargetAmount = budgetItem.TargetAmount,
-                            CurrnetAmount = budgetItem.CurrnetAmount
-                        };
-                        budgetItems.Add(newBudgetItems);
-                    }
-                
+            List<HomeBudgetItemsVM> budgetItems = new List<HomeBudgetItemsVM>();
+
+
+            var householdBudgetItems = db.BudgetItems.Where(bi => bi.BudgetId == budgetId).ToList();
+            foreach (var budgetItem in householdBudgetItems)
+            {
+                if (budgetItem.IsDeleted == false)
+                {
+                    HomeBudgetItemsVM newBudgetItems = new HomeBudgetItemsVM
+                    {
+                        Id = budgetItem.Id,
+
+                        ItemName = budgetItem.ItemName,
+                        Description = budgetItem.Description,
+                        OwnerId = budgetItem.OwnerId,
+                        Created = budgetItem.Created.ToString("MMM dd yyyy"),
+                        BudgetId = budgetItem.BudgetId,
+                        TargetAmount = budgetItem.TargetAmount,
+                        CurrentAmount = budgetItem.CurrentAmount
+                    };
+                    budgetItems.Add(newBudgetItems);
+                }
+
             }
             return budgetItems;
         }
@@ -106,7 +114,7 @@ namespace RogueFinancialPortal.Helpers
                             Created = budgetItem.Created.ToString("MMM dd yyyy"),
                             BudgetId = budgetItem.BudgetId,
                             TargetAmount = budgetItem.TargetAmount,
-                            CurrnetAmount = budgetItem.CurrnetAmount
+                            CurrentAmount = budgetItem.CurrentAmount
                             //Transactions = db.Transactions
                         };
                         budgetItems.Add(newBudgetItems);
@@ -118,7 +126,7 @@ namespace RogueFinancialPortal.Helpers
         public List<HomeTransactionsVM> GetBudgetItemTransactions(int budgetItemId)
         {
             List<HomeTransactionsVM> transactions = new List<HomeTransactionsVM>();
-            var budgetItemTransactions = db.Transactions.Where(bi =>bi.BudgetItemId  == budgetItemId).ToList();
+            var budgetItemTransactions = db.Transactions.Where(bi => bi.BudgetItemId == budgetItemId).ToList();
 
             foreach (var transaction in budgetItemTransactions)
             {
@@ -127,10 +135,10 @@ namespace RogueFinancialPortal.Helpers
                     HomeTransactionsVM newTransaction = new HomeTransactionsVM
                     {
                         Id = transaction.Id,
-                        AccountId = transaction.AccountId,
+                        BankAccontId = transaction.BankAccontId,
                         BudgetItemId = transaction.BudgetItemId,
                         BudgetItemName = transaction.BudgetItem.ItemName,
-                        TransactionType = transaction.TransactionType,
+                        TransactionType = (TransactionType)transaction.TransactionType,
                         OwnerId = transaction.OwnerId,
                         Created = transaction.Created.ToString("MMM dd yyyy"),
                         Memo = transaction.Memo,
@@ -149,31 +157,30 @@ namespace RogueFinancialPortal.Helpers
             List<HomeTransactionsVM> transactions = new List<HomeTransactionsVM>();
             foreach (var BankAccount in household.BankAccounts)
             {
-                var householdTransactions = db.Transactions.Where(bi => bi.AccountId == BankAccount.Id).ToList();
+                var householdTransactions = db.Transactions.Where(bi => bi.BankAccontId == BankAccount.Id).ToList();
                 foreach (var transaction in householdTransactions)
                 {
                     if (transaction.IsDeleted == false)
                     {
-                        HomeTransactionsVM newTransaction = new HomeTransactionsVM
-                        {
-                            Id = transaction.Id,
-                            AccountId = transaction.AccountId,
-                            BudgetItemId = transaction.BudgetItemId,
-                            BudgetItemName = transaction.BudgetItem.ItemName,
-                            TransactionType=  transaction.TransactionType,
-                            OwnerId = transaction.OwnerId,
-                            Created = transaction.Created.ToString("MMM dd yyyy"),
-                            Memo = transaction.Memo,
-                            FilePath = transaction.FilePath,
-                            Amount = transaction.Amount,
-
-                        };
-                        transactions.Add(newTransaction);
+                        transactions.Add(ConvertTransaction(transaction.Id));
                     }
                 }
             }
             return transactions;
         }
+        public List<HomeTransactionsVM> GetBudgetTransactions(int budgetId)
+        {
+            List<HomeTransactionsVM> newTransactions = new List<HomeTransactionsVM>();
+
+            foreach (var transaction in db.Transactions.Where(t => t.BudgetItem.BudgetId == budgetId).ToList())
+            {
+                if (transaction.IsDeleted == false)
+                {
+                    newTransactions.Add(ConvertTransaction(transaction.Id));
+                }
+            }
+            return newTransactions;
+        }      
         public List<HomeMemberVM> GetHouseHoldMembers(int houseHoldId)
         {
 
@@ -198,6 +205,132 @@ namespace RogueFinancialPortal.Helpers
 
             }
             return members;
+        } 
+        public HomeTransactionsVM ConvertTransaction(int transactionId)
+        {
+            var transaction = db.Transactions.Find(transactionId);
+            HomeTransactionsVM newTransaction = new HomeTransactionsVM
+            {
+                Id = transaction.Id,
+                BankAccontId = transaction.BankAccontId,
+                BudgetItemId = transaction.BudgetItemId,
+                BudgetItemName = transaction.BudgetItem.ItemName,
+                TransactionType = (TransactionType)transaction.TransactionType,
+                OwnerId = transaction.OwnerId,
+                Created = transaction.Created.ToString("MMM dd yyyy"),
+                Memo = transaction.Memo,
+                FilePath = transaction.FilePath,
+                Amount = transaction.Amount,
+
+            };
+            return newTransaction;
         }
+        public HomeBudgetItemsVM ConvertBudgetItems(int budgetItemId)
+        {
+
+            BudgetItem budgetItem = db.BudgetItems.Find(budgetItemId);
+            HomeBudgetItemsVM newBudgetItems = new HomeBudgetItemsVM
+            {
+                Id = budgetItem.Id,
+
+                ItemName = budgetItem.ItemName,
+                Description = budgetItem.Description,
+                OwnerId = budgetItem.OwnerId,
+                Created = budgetItem.Created.ToString("MMM dd yyyy"),
+                BudgetId = budgetItem.BudgetId,
+                TargetAmount = budgetItem.TargetAmount,
+                CurrentAmount = budgetItem.CurrentAmount
+            };
+
+            return newBudgetItems;
+        }
+        public HomeBudgetVm ConvertBudget(int budgetId)
+        {
+            Budget budget = db.Budgets.Find(budgetId);
+
+            HomeBudgetVm newBudget = new HomeBudgetVm
+            {
+                Id = budget.Id,
+                BudgetName = budget.BudgetName,
+                Description = budget.Description,
+                OwnerId = budget.OwnerId,
+                BankAccontId = budget.BankAccontId,
+                Created = budget.Created.ToString("MMM dd yyyy"),
+                CurrentAmount = budget.CurrentAmount,
+                TargetAmount = budget.TargetAmount
+
+            };
+
+
+
+            return newBudget;
+        }
+        public HomeBankAccountVM ConvertBankAccounts(int bankAccountId)
+        {
+            BankAccount bankAccount = db.BankAccounts.Find(bankAccountId);
+            
+                    HomeBankAccountVM newBankAccountWizardVM = new HomeBankAccountVM
+                    {
+                        Id = bankAccount.Id,
+                        Created = bankAccount.Created.ToString("MMM dd yyyy"),
+                        BankAccountName = bankAccount.BankAccountName,
+                        StartingBalance = bankAccount.StartingBalance,
+                        CurrentBalance = bankAccount.CurrentBalance,
+
+                        WarningBalance = bankAccount.WarningBalance,
+                        AccountType = bankAccount.AccountType
+
+                    };
+             
+            return newBankAccountWizardVM;
+        }
+        public void DeleteTransaction(int transactionId)
+        {
+            var transaction = db.Transactions.Find(transactionId);
+            if (!transaction.IsDeleted)
+            {
+                transaction.DeleteTransaction();
+            }
+            db.SaveChanges();
+            historyHelper.TranactionIsdeleted(transaction);
+        }
+        public void DeleteBudgetItem(int budgetItemId)
+        {
+            var budgetItem = db.BudgetItems.Find(budgetItemId);
+            budgetItem.IsDeleted = true;
+            foreach(var transaction in budgetItem.Transactions.ToList())
+            {
+                DeleteTransaction(transaction.Id);
+            }
+            db.SaveChanges();
+            historyHelper.BudgetItemIsDeleted(budgetItem);
+
+        }
+        public void DeleteBudget(int budgetId)
+        {
+            var budget = db.Budgets.Find(budgetId);
+            budget.IsDeleted = true;
+            foreach (var budgetItem in budget.Items.ToList())
+            {
+                DeleteBudgetItem(budgetItem.Id);
+            }
+            db.SaveChanges();
+            historyHelper.CheckBudgetIsDeleted(budget);
+        }
+        public void DeleteBankAccount(int bankAccountId)
+        {
+            var bankAccount = db.BankAccounts.Find(bankAccountId);
+            bankAccount.IsDeleted = true;
+            foreach (var budget in db.Budgets.Where(b=>b.BankAccontId == bankAccountId).ToList())
+            {
+                DeleteBudget(budget.Id);
+            }
+            notificationHelper.BankAccountDeleted(bankAccount);
+            db.SaveChanges();
+            historyHelper.BankAccountIsDeleted(bankAccount);
+
+
+        }
+
     }
 }
