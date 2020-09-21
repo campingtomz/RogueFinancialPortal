@@ -53,7 +53,7 @@ namespace RogueFinancialPortal.Helpers
                         BudgetName = budget.BudgetName,
                         Description = budget.Description,
                         OwnerId = budget.OwnerId,
-                        BankAccontId = budget.BankAccontId,
+                        BankAccountId = budget.BankAccountId,
                         Created = budget.Created.ToString("MMM dd yyyy"),
                         CurrentAmount = budget.CurrentAmount,
                         TargetAmount = budget.TargetAmount,
@@ -135,7 +135,7 @@ namespace RogueFinancialPortal.Helpers
                     HomeTransactionsVM newTransaction = new HomeTransactionsVM
                     {
                         Id = transaction.Id,
-                        BankAccontId = transaction.BankAccontId,
+                        BankAccountId = transaction.BankAccountId,
                         BudgetItemId = transaction.BudgetItemId,
                         BudgetItemName = transaction.BudgetItem.ItemName,
                         TransactionType = (TransactionType)transaction.TransactionType,
@@ -157,7 +157,7 @@ namespace RogueFinancialPortal.Helpers
             List<HomeTransactionsVM> transactions = new List<HomeTransactionsVM>();
             foreach (var BankAccount in household.BankAccounts)
             {
-                var householdTransactions = db.Transactions.Where(bi => bi.BankAccontId == BankAccount.Id).ToList();
+                var householdTransactions = db.Transactions.Where(bi => bi.BankAccountId == BankAccount.Id).ToList();
                 foreach (var transaction in householdTransactions)
                 {
                     if (transaction.IsDeleted == false)
@@ -195,7 +195,7 @@ namespace RogueFinancialPortal.Helpers
                     FirstName = member.FirstName,
                     LastName = member.LastName,
                     FullName = member.FullName,
-                    Descriptiton = member.Descriptiton,
+                    Descriptiton = member.Description,
                     AvatarPath = member.AvatarPath,
 
 
@@ -212,7 +212,7 @@ namespace RogueFinancialPortal.Helpers
             HomeTransactionsVM newTransaction = new HomeTransactionsVM
             {
                 Id = transaction.Id,
-                BankAccontId = transaction.BankAccontId,
+                BankAccountId = transaction.BankAccountId,
                 BudgetItemId = transaction.BudgetItemId,
                 BudgetItemName = transaction.BudgetItem.ItemName,
                 TransactionType = (TransactionType)transaction.TransactionType,
@@ -254,7 +254,7 @@ namespace RogueFinancialPortal.Helpers
                 BudgetName = budget.BudgetName,
                 Description = budget.Description,
                 OwnerId = budget.OwnerId,
-                BankAccontId = budget.BankAccontId,
+                BankAccountId = budget.BankAccountId,
                 Created = budget.Created.ToString("MMM dd yyyy"),
                 CurrentAmount = budget.CurrentAmount,
                 TargetAmount = budget.TargetAmount
@@ -321,7 +321,7 @@ namespace RogueFinancialPortal.Helpers
         {
             var bankAccount = db.BankAccounts.Find(bankAccountId);
             bankAccount.IsDeleted = true;
-            foreach (var budget in db.Budgets.Where(b=>b.BankAccontId == bankAccountId).ToList())
+            foreach (var budget in db.Budgets.Where(b=>b.BankAccountId == bankAccountId).ToList())
             {
                 DeleteBudget(budget.Id);
             }

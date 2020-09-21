@@ -19,7 +19,7 @@ namespace RogueFinancialPortal.Helpers
         }
         public List<Transaction> GetBankAccountTransactions(int BankAccountId)
         {
-            return db.Transactions.Where(t => t.BankAccontId == BankAccountId).ToList();
+            return db.Transactions.Where(t => t.BankAccountId == BankAccountId).ToList();
         }
         public List<Transaction> GetBudgetItemTransactions(int BudgetItemId)
         {

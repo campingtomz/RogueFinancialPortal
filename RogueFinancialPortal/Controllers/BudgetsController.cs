@@ -64,7 +64,7 @@ namespace RogueFinancialPortal.Controllers
                 Budget newBudget = new Budget();
                 newBudget.BudgetName = budget.BudgetName;
                 newBudget.Description = budget.Description;
-                newBudget.BankAccontId = AccountName;
+                newBudget.BankAccountId = AccountName;
 
                 db.Budgets.Add(newBudget);
                 db.SaveChanges();

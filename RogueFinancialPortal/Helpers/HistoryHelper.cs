@@ -90,7 +90,7 @@ namespace RogueFinancialPortal.Helpers
         }
         private void CheckBankAccountId(Transaction oldTranaction, Transaction newTranaction)
         {
-            if (oldTranaction.BankAccontId != newTranaction.BankAccontId)
+            if (oldTranaction.BankAccountId != newTranaction.BankAccountId)
             {
                 TransactionHistory NewHistory = new TransactionHistory()
                 {
@@ -98,9 +98,9 @@ namespace RogueFinancialPortal.Helpers
                     TransactionId = newTranaction.Id,
                     User = db.Users.Find(HttpContext.Current.User.Identity.GetUserId()),
                     ChangedOn = DateTime.Now,
-                    Property = "BankAccontId",
-                    OldValue = $"{oldTranaction.BankAccontId}",
-                    NewValue = $"{newTranaction.BankAccontId}",
+                    Property = "BankAccountId",
+                    OldValue = $"{oldTranaction.BankAccountId}",
+                    NewValue = $"{newTranaction.BankAccountId}",
                 };
                 db.Histories.Add(NewHistory);
             }
@@ -223,7 +223,7 @@ namespace RogueFinancialPortal.Helpers
         {
             CheckBudgetName(oldBudget, newBudget);
             CheckBudgetDescription(oldBudget, newBudget);
-            CheckBudgetBankAccontId(oldBudget, newBudget);
+            CheckBudgetBankAccountId(oldBudget, newBudget);
 
             db.SaveChanges();
         }
@@ -261,9 +261,9 @@ namespace RogueFinancialPortal.Helpers
                 db.Histories.Add(NewHistory);
             }
         }
-        private void CheckBudgetBankAccontId(Budget oldBudget, Budget newBudget)
+        private void CheckBudgetBankAccountId(Budget oldBudget, Budget newBudget)
         {
-            if (oldBudget.BankAccontId != newBudget.BankAccontId)
+            if (oldBudget.BankAccountId != newBudget.BankAccountId)
             {
                 BudgetHistory NewHistory = new BudgetHistory()
                 {
@@ -271,9 +271,9 @@ namespace RogueFinancialPortal.Helpers
                     BudgetId = newBudget.Id,
                     User = db.Users.Find(HttpContext.Current.User.Identity.GetUserId()),
                     ChangedOn = DateTime.Now,
-                    Property = "BankAccontId",
-                    OldValue = $"{oldBudget.BankAccontId}",
-                    NewValue = $"{newBudget.BankAccontId}",
+                    Property = "BankAccountId",
+                    OldValue = $"{oldBudget.BankAccountId}",
+                    NewValue = $"{newBudget.BankAccountId}",
                 };
                 db.Histories.Add(NewHistory);
             }

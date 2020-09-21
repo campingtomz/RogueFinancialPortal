@@ -290,7 +290,7 @@ namespace RogueFinancialPortal.Migrations
                 {
                     Budget newBudget = new Budget(true)
                     {
-                        BankAccontId= bankAccount.Id,
+                        BankAccountId= bankAccount.Id,
                         Created = DateTime.Now,
                         HouseHoldId = bankAccount.HouseHoldId,
                         OwnerId = houseHoldMembers[rand.Next(houseHoldMembers.Count)].Id,
@@ -302,7 +302,7 @@ namespace RogueFinancialPortal.Migrations
 
                     Budget newBudget1 = new Budget(true)
                     {
-                        BankAccontId = bankAccount.Id,
+                        BankAccountId = bankAccount.Id,
                         Created = DateTime.Now,
                         HouseHoldId = bankAccount.HouseHoldId,
                         OwnerId = houseHoldMembers[rand.Next(houseHoldMembers.Count)].Id,
@@ -317,7 +317,7 @@ namespace RogueFinancialPortal.Migrations
                 {
                     Budget newBudget = new Budget(true)
                     {
-                        BankAccontId = bankAccount.Id,
+                        BankAccountId = bankAccount.Id,
                         Created = DateTime.Now,
                         HouseHoldId = bankAccount.HouseHoldId,
                         OwnerId = houseHoldMembers[rand.Next(houseHoldMembers.Count)].Id,
@@ -329,7 +329,7 @@ namespace RogueFinancialPortal.Migrations
 
                     Budget newBudget1 = new Budget(true)
                     {
-                        BankAccontId = bankAccount.Id,
+                        BankAccountId = bankAccount.Id,
                         Created = DateTime.Now,
                         HouseHoldId = bankAccount.HouseHoldId,
                         OwnerId = houseHoldMembers[rand.Next(houseHoldMembers.Count)].Id,
@@ -340,7 +340,7 @@ namespace RogueFinancialPortal.Migrations
                     context.Budgets.AddOrUpdate(newBudget1);
                     Budget newBudget2 = new Budget(true)
                     {
-                        BankAccontId = bankAccount.Id,
+                        BankAccountId = bankAccount.Id,
                         Created = DateTime.Now,
                         HouseHoldId = bankAccount.HouseHoldId,
                         OwnerId = houseHoldMembers[rand.Next(houseHoldMembers.Count)].Id,

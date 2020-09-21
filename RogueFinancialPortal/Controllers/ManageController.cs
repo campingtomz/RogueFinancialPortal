@@ -72,17 +72,7 @@ namespace RogueFinancialPortal.Controllers
             db.SaveChanges();
             return Json(true);
         }
-        public ActionResult LeaveHouseHold()
-        {
-            var userId = User.Identity.GetUserId();
-            var houseHoldId = (int)User.Identity.GetHouseHoldId();
-            if (roleHelper.ListUserRoles(userId).FirstOrDefault() == "Head")
-            {
-                ViewBag.Members = new SelectList(db.Users.Where(u => u.HouseHoldId == houseHoldId).ToList());
-               
-            }
-            return View();
-        }
+   
         //
         // GET: /Manage/Index
         public async Task<ActionResult> Index(ManageMessageId? message)

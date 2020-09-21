@@ -9,7 +9,7 @@ namespace RogueFinancialPortal.ViewModels
     {
         public int Id { get; set; }
         public string OwnerId { get; set; }
-        public int BankAccontId { get; set; }
+        public int BankAccountId { get; set; }
         public string BudgetName { get; set; }
         public string Description { get; set; }
 

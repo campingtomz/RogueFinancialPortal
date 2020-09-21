@@ -17,7 +17,7 @@ namespace RogueFinancialPortal.Helpers
         UserHelper userHelper = new UserHelper();
         public void NewTransactionCheck(Transaction newTransaction)
         {
-            var bankAccount = db.BankAccounts.Find(newTransaction.BankAccontId);
+            var bankAccount = db.BankAccounts.Find(newTransaction.BankAccountId);
             var budgetitem = db.BudgetItems.Find(newTransaction.BudgetItemId);
             var budget = db.Budgets.Find(budgetitem.BudgetId);
 

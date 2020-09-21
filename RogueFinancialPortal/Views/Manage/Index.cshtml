@@ -120,7 +120,7 @@
                                 <div class="col-6">
                                     <h4 class="card-title">Change Password</h4>
                                     <h6 class="card-subtitle p-l-20">Change Password</h6>
-                                    @Html.ActionLink("Change Password", "ManageUser", "Manage", new { userId = user.Id }, new { @class = "p-l-20" })
+                                    @Html.ActionLink("Change Password", "ChangePassword", "Manage", new { userId = user.Id }, new { @class = "p-l-20" })
                                 </div>
                             </div>
                             @if (userRoleHelper.ListUserRoles(user.Id).FirstOrDefault() != "Default") {
@@ -128,7 +128,7 @@
                             <div class="row p-l-20">
                                 <div class="col-6">
                                     <h4 class="card-title">Leave HouseHold</h4>
-                                    @Html.ActionLink("Leave Household", "LeaveAsync", "Households", new { @class = "p-l-20" })
+                                    @Html.ActionLink("Leave Household", "LeaveAsync", "HouseHolds", new { @class = "p-l-20" })
                                 </div>
                             </div>
                             }

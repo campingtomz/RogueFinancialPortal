@@ -46,7 +46,7 @@ namespace RogueFinancialPortal.Controllers
 
 
 
-        //[Authorize(Roles = "Head")]
+        [Authorize(Roles = "Head")]
         [HttpGet]
         public ActionResult HouseHoldWizard()
         {
@@ -88,7 +88,7 @@ namespace RogueFinancialPortal.Controllers
                                 Budget newBudget = new Budget();
                                 newBudget.BudgetName = budget.BudgetName;
                                 newBudget.Description = budget.Description;
-                                newBudget.BankAccontId = newBankAccount.Id;
+                                newBudget.BankAccountId = newBankAccount.Id;
 
                                 db.Budgets.Add(newBudget);
                                 db.SaveChanges();
@@ -182,31 +182,37 @@ namespace RogueFinancialPortal.Controllers
             return View(houseHold);
         }
 
-        //public async Task<ActionResult> LeaveAsync()
-        //{
-        //    var userId = User.Identity.GetUserId();
-        //    var user = db.Users.Find(userId);
-        //    var role = roleHelper.ListUserRoles(userId).FirstOrDefault();
-        //    switch (role)
-        //    {
-        //        case "Head":
-        //            var memberCount = db.Users.Where(u => u.HouseHoldId == user.HouseHoldId).Count() - 1;
-        //            if (memberCount >= 1)
-        //            {
-        //                TempData["Message"] = $"You are unable to leave the Household! there are still <b>{memberCount}<b> other members in the household, you must select one to replace you as head of Household";
-        //                ViewBag.Members = new SelectList(db.Users.Where(u => u.HouseHoldId == user.HouseHoldId).ToList(), "Id", "FullName");
-        //                ViewBag.Ishead = true;
-        //            }
-        //            return View();
-        //        case "Member":
-        //            ViewBag.Ishead = false;
-        //            return View();
+        public ActionResult LeaveAsync()
+        {
+            var userId = User.Identity.GetUserId();
+            var user = db.Users.Find(userId);
+            var role = roleHelper.ListUserRoles(userId).FirstOrDefault();
+            switch (role)
+            {
+                case "Head":
+                    var memberCount = db.Users.Where(u => u.HouseHoldId == user.HouseHoldId).Count() - 1;
+                    if (memberCount >= 1)
+                    {
+                        TempData["Message"] = $"You are unable to leave the Household! There are still <b>{memberCount}<b> other members in the household, you must select one to replace you as head of Household";
+                        ViewBag.Members = new SelectList(db.Users.Where(u => u.HouseHoldId == user.HouseHoldId).ToList(), "Id", "FullName");
+                        ViewBag.Ishead = true;
+                    }
+                    else
+                    {
+                        TempData["Message"] = $"You are Leaving the HouseHold. The HouseHold and all data will be Delete! Are you sure you want to leave?";
+                        ViewBag.Ishead = false;
+                    }
+                    return View();
+                case "Member":
+                    TempData["Message"] = $"You are Leaving the HouseHold. Are you sure you want to leave?";
+                    ViewBag.Ishead = false;
+                    return View();
 
-        //        default:
-        //            return RedirectToAction("index", "Home");
+                default:
+                    return RedirectToAction("index", "Home");
 
-        //    }
-        //}
+            }
+        }
 
         // GET: HouseHolds/Delete/5
         public ActionResult Delete(int? id)
@@ -222,45 +228,51 @@ namespace RogueFinancialPortal.Controllers
             }
             return View(houseHold);
         }
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> LeaveAsync()
-        //{
-        //    var userId = User.Identity.GetUserId();
-        //    var user = db.Users.Find(userId);
-        //    var role = roleHelper.ListUserRoles(userId).FirstOrDefault();
-        //    switch (role)
-        //    {
-        //        case "Head":
-        //            var memberCount = db.Users.Where(u => u.HouseHoldId == user.HouseHoldId).Count() - 1;
-        //            if(memberCount >= 1)
-        //            {
-        //                TempData["Message"] = $"You are unable to leave the Household! there are still <b>{memberCount}<b> other members in the household, you must select one to replace you as head of Household";
-        //                return RedirectToAction("ExitDenied");
-        //            }
-        //            user.HouseHold.IsDeleted = true;  
-        //            user.HouseHoldId = null;
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> LeaveAsync(string newHeadUserId)
+        {
+            var userId = User.Identity.GetUserId();
+            var user = db.Users.Find(userId);
+            var household = db.HouseHolds.Find(user.HouseHoldId);
+            var role = roleHelper.ListUserRoles(userId).FirstOrDefault();
+            switch (role)
+            {
+                case "Head":
+                    if (newHeadUserId != null)
+                    {
+                        household.OwnerId = newHeadUserId;
+                        roleHelper.UpdateUserRole(newHeadUserId, "Head");
+                        var NewUserHead = db.Users.Find(newHeadUserId);
+                        await AuthorizeExtensions.RefreshAuthentication(HttpContext, NewUserHead);
+                    }
+                    else
+                    {
+                        household.IsDeleted = true;
+                        user.HouseHoldId = null;
+                    }
 
-        //            //var household = db.HouseHolds.Find(user.HouseHoldId);
-        //            //db.HouseHolds.Remove(household);
-        //            db.SaveChanges();
-        //            roleHelper.UpdateUserRole(userId, "Default");
-        //            await AuthorizeExtensions.RefreshAuthentication(HttpContext, user);
-        //            return RedirectToAction("Index", "Home");
-                    
-        //        case "Member":
-        //            user.HouseHoldId = null;
+                    //var household = db.HouseHolds.Find(user.HouseHoldId);
+                    //db.HouseHolds.Remove(household);
+                    db.SaveChanges();
 
-        //            db.SaveChanges();
-        //            roleHelper.UpdateUserRole(userId, "Default");
-        //            await AuthorizeExtensions.RefreshAuthentication(HttpContext, user);
-        //            return RedirectToAction("Index", "Home");
-        //        default:
-        //            return RedirectToAction("index","Home");
+                    roleHelper.UpdateUserRole(userId, "Default");
+                    await AuthorizeExtensions.RefreshAuthentication(HttpContext, user);
+                    return RedirectToAction("Index", "Home");
+
+                case "Member":
+                    user.HouseHoldId = null;
+
+                    db.SaveChanges();
+                    roleHelper.UpdateUserRole(userId, "Default");
+                    await AuthorizeExtensions.RefreshAuthentication(HttpContext, user);
+                    return RedirectToAction("Index", "Home");
+                default:
+                    return RedirectToAction("index", "Home");
 
 
-        //    }
-        //}
+            }
+        }
 
         // POST: HouseHolds/Delete/5
         [HttpPost, ActionName("Delete")]

@@ -19,7 +19,7 @@ namespace RogueFinancialPortal.Models
         #region Parents/Children
         public int HouseHoldId { get; set; }
         public string OwnerId { get; set; }
-        public int BankAccontId { get; set; }
+        public int BankAccountId { get; set; }
         public string Description { get; set; }
         public virtual HouseHold HouseHold { get; set; }
         public virtual ApplicationUser Owner { get; set; }

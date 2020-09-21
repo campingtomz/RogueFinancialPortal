@@ -17,7 +17,7 @@ namespace RogueFinancialPortal.Models
         
         public string OwnerId { get; set; }
         public virtual ApplicationUser Owner { get; set; }
-        public int BankAccontId { get; set; }
+        public int BankAccountId { get; set; }
         public virtual BankAccount BanckAccount { get; set; }
         public int? BudgetItemId { get; set; }
         public virtual BudgetItem BudgetItem { get; set; }

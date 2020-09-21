@@ -32,7 +32,7 @@ namespace RogueFinancialPortal.Models
         [Display(Name = "Last Name")]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "Last Name Must be between 2 and 50 characters")]
         public string LastName { get; set; }
-        public string Descriptiton { get; set; }
+        public string Description { get; set; }
         public string AvatarPath { get; set; }
         public int? HouseHoldId { get; set; }
         public virtual HouseHold HouseHold { get; set; }

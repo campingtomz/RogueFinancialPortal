@@ -53,7 +53,7 @@ namespace RogueFinancialPortal.Controllers
                 BudgetItemId = Transaction.BudgetItemId,
                 Created = DateTime.Now,
                 OwnerId = User.Identity.GetUserId(),
-                BankAccontId = budgetItem.Budget.BankAccontId,
+                BankAccountId = budgetItem.Budget.BankAccountId,
                 TransactionType = Transaction.TransactionType
             };
             db.Transactions.Add(tranasction);
@@ -85,7 +85,7 @@ namespace RogueFinancialPortal.Controllers
             {
                 BudgetName = newBudget.BudgetName,
                 Description = newBudget.Description,
-                BankAccontId = newBudget.BankAccontId,
+                BankAccountId = newBudget.BankAccountId,
 
             };
             db.Budgets.Add(budgets);
@@ -158,7 +158,7 @@ namespace RogueFinancialPortal.Controllers
         {
 
             List<HomeTransactionsVM> newTransactions = new List<HomeTransactionsVM>();
-            foreach (var transaction in db.Transactions.Where(t => t.BankAccontId == accountId).ToList())
+            foreach (var transaction in db.Transactions.Where(t => t.BankAccountId == accountId).ToList())
             {
                 if (transaction.IsDeleted == false)
                 {
@@ -242,7 +242,7 @@ namespace RogueFinancialPortal.Controllers
             var budget = db.Budgets.Find(jsBudget.Id);
             budget.BudgetName = jsBudget.BudgetName;
             budget.Description = jsBudget.Description;
-            budget.BankAccontId = jsBudget.BankAccontId;
+            budget.BankAccountId = jsBudget.BankAccountId;
             db.SaveChanges();
             var newBudget = db.Budgets.AsNoTracking().FirstOrDefault(b => b.Id == jsBudget.Id);
             historyHelper.BudgetEdit(oldBudget, newBudget);
@@ -274,7 +274,7 @@ namespace RogueFinancialPortal.Controllers
             transaction.EditTransaction();
             transaction.Memo = jsTransaction.Memo;
             transaction.BudgetItemId = jsTransaction.BudgetItemId;
-            transaction.BankAccontId = budgetItem.Budget.BankAccontId;
+            transaction.BankAccountId = budgetItem.Budget.BankAccountId;
 
             transaction.TransactionType = jsTransaction.TransactionType;
             transaction.Amount = jsTransaction.Amount;

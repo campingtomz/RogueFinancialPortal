@@ -1112,7 +1112,6 @@
     <Content Include="Views\Account\AcceptInvitaiton.cshtml" />
     <Content Include="Views\Account\InvitationError.cshtml" />
     <Content Include="Views\HouseHolds\LeaveAsync.cshtml" />
-    <Content Include="Views\Manage\LeaveHouseHold.cshtml" />
     <Content Include="Views\Home\DefaultIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>

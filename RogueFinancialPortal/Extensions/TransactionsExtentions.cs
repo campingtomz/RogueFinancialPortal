@@ -30,7 +30,7 @@ namespace RogueFinancialPortal.Extensions
         public static void UpdateBankBalance(Transaction transaction)
 
         {
-            var bankAccount = db.BankAccounts.Find(transaction.BankAccontId);
+            var bankAccount = db.BankAccounts.Find(transaction.BankAccountId);
 
             if (transaction.TransactionType == TransactionType.Withdrawal)
             {
