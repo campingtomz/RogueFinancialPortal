@@ -49,6 +49,10 @@ namespace RogueFinancialPortal.Models
             Created = DateTime.Now;
             OwnerId = HttpContext.Current.User.Identity.GetUserId();
         }
+        public Transaction(bool inSeed)
+        {
+
+        }
 
         #endregion
     }

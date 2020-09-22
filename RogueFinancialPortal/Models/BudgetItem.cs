@@ -24,7 +24,7 @@ namespace RogueFinancialPortal.Models
         public DateTime Created { get; set; }
         public string Description { get; set; }
 
-        [Display(Name = "Currnet Amount")]
+        [Display(Name = "Current Amount")]
         public decimal CurrentAmount { get; set; }
        
         [Display(Name = "Target Amount")]
